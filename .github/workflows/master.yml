@@ -20,6 +20,6 @@ jobs:
         git config advice.addIgnoredFile false
         cd build
         git remote set-url origin git@github.com:nut2334/nut2334.github.io.git
-        git add .
+        git add *
         git commit -m test
         git push origin main
