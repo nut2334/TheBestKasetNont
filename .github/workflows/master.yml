@@ -1,0 +1,21 @@
+name: buildauto
+on: 
+  push:
+    branches: ["main"]
+jobs:
+  buildnow:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with: 
+        node-version: 20
+        token: ${{ secrets.TOKEN }}
+      run: |
+        npm install
+        npm run build
+        cd build
+        git remote set-url origin git@github.com:nut2334/nut2334.github.io.git
+        git add .
+        git commit -m test
+        git push origin main
