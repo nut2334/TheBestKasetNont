@@ -17,6 +17,7 @@ jobs:
         npm run build
         git config --global user.name "nut2334"
         git config --global user.email "nut2334@gmail.com"
+        git config advice.addIgnoredFile false
         cd build
         git remote set-url origin git@github.com:nut2334/nut2334.github.io.git
         git add .
