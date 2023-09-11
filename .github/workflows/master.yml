@@ -12,11 +12,11 @@ jobs:
         node-version: 20
         token: ${{ secrets.TOKEN }}
     - name: build
-        run: |
-          npm install
-          npm run build
-          cd build
-          git remote set-url origin git@github.com:nut2334/nut2334.github.io.git
-          git add .
-          git commit -m test
-          git push origin main
+      run: |
+        npm install
+        npm run build
+        cd build
+        git remote set-url origin git@github.com:nut2334/nut2334.github.io.git
+        git add .
+        git commit -m test
+        git push origin main
