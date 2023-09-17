@@ -4,11 +4,11 @@ import Register from './register';
 import Forgot from './forgot';
 import React from 'react';
 import Home from './home';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
-      <BrowserRouter>
+      <HashRouter>
         <Navbar />
           <Routes>
           <Route path="/" element={<Home />} />
@@ -16,7 +16,7 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route path="/Forgot" element={<Forgot />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
   );
 }
 
