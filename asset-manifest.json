@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/TheBestKasetNont/static/css/main.e6c13ad2.css",
-    "main.js": "/TheBestKasetNont/static/js/main.489d13ec.js",
+    "main.js": "/TheBestKasetNont/static/js/main.c880da1d.js",
     "static/js/787.6068f754.chunk.js": "/TheBestKasetNont/static/js/787.6068f754.chunk.js",
     "index.html": "/TheBestKasetNont/index.html",
     "main.e6c13ad2.css.map": "/TheBestKasetNont/static/css/main.e6c13ad2.css.map",
-    "main.489d13ec.js.map": "/TheBestKasetNont/static/js/main.489d13ec.js.map",
+    "main.c880da1d.js.map": "/TheBestKasetNont/static/js/main.c880da1d.js.map",
     "787.6068f754.chunk.js.map": "/TheBestKasetNont/static/js/787.6068f754.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.489d13ec.js"
+    "static/js/main.c880da1d.js"
   ]
 }
