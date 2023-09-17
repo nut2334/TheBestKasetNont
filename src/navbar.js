@@ -37,13 +37,13 @@ function Navbar() {
 
   return (
     
-    <AppBar position="static" sx={{ backgroundColor: 'green'}}>
+    <AppBar position="static" sx={{ background: 'linear-gradient(0deg, rgba(206,222,189,1) 31%, rgba(250,241,228,1) 100%)' ,color:'#129549',}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <IconButton sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
             <img src={process.env.PUBLIC_URL + "/image/karsetnont.png"} alt="Italian Trulli" height= "40px"></img>
           </IconButton>
-          <NavLink to='/' exact activeClassName="active-link">
+          <NavLink to='/' style={{ textDecoration: 'none' }}>
           <Typography
             variant="h6"
             noWrap
@@ -53,8 +53,8 @@ function Navbar() {
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'Kanit',
               fontWeight: 700,
-              color: 'inherit',
               textDecoration: 'none',
+              color: 'black'
             }}
           >
             ของเด็ดเกษตรนนท์
@@ -66,7 +66,6 @@ function Navbar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
             >
               <MenuIcon />
             </IconButton>
@@ -90,7 +89,7 @@ function Navbar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography textAlign="center" >{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -108,8 +107,8 @@ function Navbar() {
               flexGrow: 1,
               fontFamily: 'Kanit',
               fontWeight: 700,
-              color: 'inherit',
               textDecoration: 'none',
+              color: 'black'
             }}
           >
             ของเด็ดเกษตรนนท์
@@ -119,7 +118,7 @@ function Navbar() {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: 'black', display: 'block', fontFamily: 'Kanit'}}
               >
                 {page}
               </Button>
@@ -155,7 +154,7 @@ function Navbar() {
             >
               {settings.map((setting,index) => (
                 <MenuItem key={index} onClick={handleCloseUserMenu}>
-                  <NavLink to={setting.path} exact activeClassName="active-link"><Typography textAlign="center">{setting.name}</Typography></NavLink>
+                  <NavLink to={setting.path} style={{ textDecoration: 'none' }}><Typography textAlign="center" sx={{fontFamily: 'Kanit' ,color: 'black'}}>{setting.name}</Typography></NavLink>
                 </MenuItem>
               ))}
             </Menu>
