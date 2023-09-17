@@ -36,28 +36,29 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static">
+    
+    <AppBar position="static" sx={{ backgroundColor: 'green'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <IconButton sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
             <img src={process.env.PUBLIC_URL + "/image/karsetnont.png"} alt="Italian Trulli" height= "40px"></img>
           </IconButton>
+          <NavLink to='/' exact activeClassName="active-link">
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="/TheBestKasetNont"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              fontFamily: 'Kanit',
               fontWeight: 700,
               color: 'inherit',
               textDecoration: 'none',
             }}
           >
             ของเด็ดเกษตรนนท์
-          </Typography>
+          </Typography></NavLink>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -101,12 +102,11 @@ function Navbar() {
             variant="h5"
             noWrap
             component="a"
-            href="/TheBestKasetNont"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: 'Kanit',
               fontWeight: 700,
               color: 'inherit',
               textDecoration: 'none',
