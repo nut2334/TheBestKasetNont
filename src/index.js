@@ -2,10 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import Navbar from './navbar';
-import Login from './login';
-import Register from './register';
-import Forgot from './forgot';
 import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
