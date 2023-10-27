@@ -3,7 +3,7 @@ import Login from './login';
 import Register from './register';
 import Forgot from './forgot';
 import React from 'react';
-import Home from './home';
+import Fackbook from './facebook';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
       <HashRouter>
         <Navbar />
           <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Fackbook />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/Forgot" element={<Forgot />} />
