@@ -45,7 +45,7 @@ function Fackbook() {
       </select>
       <p>คุณเลือก: {selectedOption}</p>
         <FacebookLogin
-            appId="274432504919281"
+            appId="1014829756266285"
             autoLoad={true}
             fields="accounts"
             scope='pages_show_list,pages_read_engagement'
