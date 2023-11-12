@@ -21,6 +21,7 @@ function App() {
           <Route path="/Map" element={<MarkersMap/>} />
           <Route path="/Price" element={<Price/>} />
         </Routes>
+        hi
       </HashRouter>
   );
 }
