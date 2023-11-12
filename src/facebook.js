@@ -25,13 +25,11 @@ function Fackbook() {
       })
       .catch(error => {
         console.error('เกิดข้อผิดพลาดในการเรียก API:', error);
-      }, [id, token]);
+      });
 
-  });
+  }, [id, token]);
 
   //https://graph.facebook.com/v18.0/109287808726963/feed?access_token=EAAD5mEv4dPEBO9Ds89ZB5Dnl5wyNXwW2B73DmewdU55SW469U9czjP9FxZAgxUtwC4x8KUexfN6jRZBEmeFQOUWpLCCqfTB97be6z9EptZCMbmTsb2Ndg68EG7q7xi4qZCvZB13M1EecCwkuZAkIaZCrKy7KDZAufL5Q0beZBfYsGCHUlyid4MEF0JzOOkA4O68jrlEzIDHSCEywcPlGYFZCr0VvkEZD
-
- 
 
     return (
         <div>

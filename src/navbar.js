@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { NavLink } from 'react-router-dom';
 
-const pages = [{name: 'แผนที่', path :'/Map'}];
+const pages = [{name: 'แผนที่', path :'/Map'},{name: 'ราคากลาง',path: '/Price'}];
 const settings = [{name:'เข้าสู่ระบบ',path:'/Login'}, {name:'สมัครสมาชิก',path:'/Register'},{name:'ลืมรหัสผ่าน',path:'/Forgot'}];
 
 function Navbar() {
