@@ -6,7 +6,7 @@ import React from 'react';
 import Fackbook from './facebook';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
-import Map from './map';
+import MarkersMap from './useCurrentLocation'
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/Forgot" element={<Forgot />} />
-          <Route path="/Map" element={<Map/>} />
+          <Route path="/Map" element={<MarkersMap/>} />
         </Routes>
       </HashRouter>
   );
