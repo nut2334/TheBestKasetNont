@@ -1,4 +1,0 @@
-import facebook as fb
-token = "EAAD5mEv4dPEBO1SwHAkamcagorSoUJRpZCMTpXuggqUfphvJQtVd4FuP79vCfTxWCjm9MCgdeNOhxFqIGwcEv9IbEwfIH7iM38M198uetfebrcbwaqfMa0mxUeH3sbIgWnI0evgEp4NWFHx9cAGJmezBoZAdNy7feiq87zyxB7ayuVplF4LrMyXzeMpOZCZAsauGZAfroeqOqjN6Db1hMpTSe"
-API = fb.GraphAPI(token)
-print(API.get_object('me/feed'))

@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { NavLink } from 'react-router-dom';
 
-const pages = ['แผนที่', 'เว็บบอร์ด', 'สินค้าทั้งหมด'];
+const pages = [{name: 'แผนที่', path :'/Map'}];
 const settings = [{name:'เข้าสู่ระบบ',path:'/Login'}, {name:'สมัครสมาชิก',path:'/Register'},{name:'ลืมรหัสผ่าน',path:'/Forgot'}];
 
 function Navbar() {
@@ -87,9 +87,9 @@ function Navbar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center" >{page}</Typography>
+              {pages.map((page,index) => (
+                <MenuItem key={index} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center" >{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -114,13 +114,13 @@ function Navbar() {
             ของเด็ดเกษตรนนท์
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {pages.map((page,index) => (
               <Button
-                key={page}
+                key={index}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'black', display: 'block', fontFamily: 'Kanit'}}
               >
-                {page}
+                <NavLink to={page.path} style={{ textDecoration: 'none' }}><Typography textAlign="center" sx={{fontFamily: 'Kanit' ,color: 'black'}}>{page.name}</Typography></NavLink>
               </Button>
             ))}
           </Box>

@@ -1,42 +1,77 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useRef } from "react";
+import { MapContainer, TileLayer, Marker } from "react-leaflet";
+import L from "leaflet";
 
-const useCurrentLocation = () => {
-  const [location, setLocation] = useState({
-    loaded: false,
-    coordinates: null,
-    error: null,
-  });
+import "leaflet/dist/leaflet.css";
 
-  useEffect(() => {
-    const successHandler = (position) => {
-      const { latitude, longitude } = position.coords;
-      setLocation({
-        loaded: true,
-        coordinates: { lat: latitude, lng: longitude },
-        error: null,
-      });
-    };
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useGeoLocation from "./useGeoLocation";
 
-    const errorHandler = (error) => {
-      setLocation({
-        loaded: true,
-        coordinates: null,
-        error: error,
-      });
-    };
+const markerIcon = new L.Icon({
+  iconUrl: require("./marker-icon.png"),
+  iconSize: [40, 40],
+  iconAnchor: [17, 46], //[left/right, top/bottom]
+  popupAnchor: [0, -46], //[left/right, top/bottom]
+});
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(successHandler, errorHandler);
+const MarkersMap = () => {
+  const [center, setCenter] = useState({ lat: 0, lng: 0 });
+  const ZOOM_LEVEL = 9;
+  const mapRef = useRef();
+
+  const location = useGeoLocation();
+
+  const showMyLocation = () => {
+    console.log("location", location);
+    if (location.loaded && !location.error) {
+      mapRef.current.flyTo(
+        [location.coordinates.lat, location.coordinates.lng],
+        ZOOM_LEVEL,
+        { animate: true }
+      );
     } else {
-      setLocation({
-        loaded: true,
-        coordinates: null,
-        error: { message: 'Geolocation is not supported by this browser.' },
-      });
+      alert(location.error.message);
     }
-  }, []);
+  };
 
-  return location;
+  return (
+    <>
+      <div className="row">
+        <div className="col text-center">
+          <div className="col">
+            <MapContainer center={center} zoom={ZOOM_LEVEL} ref={mapRef} style={{ height: '500px', width: '100%' }}>
+                      <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+              {location.loaded && !location.error && (
+                <Marker
+                  icon={markerIcon}
+                  position={[
+                    location.coordinates.lat,
+                    location.coordinates.lng,
+                  ]}
+                ></Marker>
+              )}
+            </MapContainer>
+          </div>
+        </div>
+      </div>
+
+      <div className="row my-4">
+        <div className="col d-flex justify-content-center">
+          <button className="btn btn-primary" onClick={showMyLocation}>
+            Locate Me <FontAwesomeIcon icon="globe" />
+          </button>
+          {
+            <p className="text-success ms-3">
+              My location is: {location.coordinates.lat} {location.coordinates.lng}
+            </p>
+          }
+        </div>
+      </div>
+    </>
+  );
 };
 
-export default useCurrentLocation;
+export default MarkersMap;
