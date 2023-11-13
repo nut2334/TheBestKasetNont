@@ -24,6 +24,10 @@ const Price = () => {
             .catch(error => {
                 console.error('เกิดข้อผิดพลาดในการเรียก API:', error);
             });
+            setMin([]);
+            setMax([]);
+            setName([]);
+            setUnit([]);
         },[keyword]);
 
         useEffect(() => {
