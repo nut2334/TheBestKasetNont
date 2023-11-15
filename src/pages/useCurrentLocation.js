@@ -2,20 +2,18 @@ import React, { useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import L from "leaflet";
 
-import "leaflet/dist/leaflet.css";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import useGeoLocation from "./useGeoLocation";
+import useGeoLocation from "../hooks/useGeoLocation";
 
 const markerIcon = new L.Icon({
-  iconUrl: require("./marker-icon.png"),
+  iconUrl: require("../assets/marker-icon.png"),
   iconSize: [40, 40],
   iconAnchor: [17, 46], //[left/right, top/bottom]
   popupAnchor: [0, -46], //[left/right, top/bottom]
 });
 
 const MarkersMap = () => {
-  const [center, setCenter] = useState({ lat: 0, lng: 0 });
+  const [center] = useState({ lat: 0, lng: 0 });
   const ZOOM_LEVEL = 9;
   const mapRef = useRef();
 

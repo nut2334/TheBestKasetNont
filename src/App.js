@@ -1,13 +1,14 @@
-import Navbar from './navbar';
-import Login from './login';
-import Register from './register';
-import Forgot from './forgot';
+import Navbar from './components/navbar';
+import Login from './pages/login';
+import Register from './pages/register';
+import Forgot from './pages/forgot';
 import React from 'react';
-import Fackbook from './facebook';
+import Fackbook from './pages/facebook';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import 'leaflet/dist/leaflet.css';
-import MarkersMap from './useCurrentLocation'
-import Price from './price'
+import MarkersMap from './pages/useCurrentLocation'
+import Price from './pages/price'
+import './core-ui/App.css';
 
 function App() {
   return (
