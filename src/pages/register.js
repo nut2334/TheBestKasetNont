@@ -13,9 +13,33 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const defaultTheme = createTheme();
 
 export default function Register() {
+  const [passwordError, setPasswordError] = React.useState(false);
+  const [usernameError, setUsernameError] = React.useState(false);
+
+  const validateUsername = (value) => {
+    const regex = /^[a-zA-Z0-9]+$/;
+    return regex.test(value);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
+    const password = data.get('password');
+    const confirmPassword = data.get('comfirmPassword');
+    const username = data.get('username');
+
+    if (!validateUsername(username)) {
+      setUsernameError(true);
+      return;
+    }
+    setUsernameError(false);
+    if (password !== confirmPassword) {
+      setPasswordError(true);
+      return;
+    }
+    setPasswordError(false);
+
     console.log({
       username: data.get('username'),
       email: data.get('email'),
@@ -25,6 +49,7 @@ export default function Register() {
       lastName: data.get('lastName'),
       tel: data.get('tel'),
     });
+    
   };
 
   return (
@@ -55,7 +80,12 @@ export default function Register() {
                   id="username"
                   label="Username"
                   autoFocus
-
+                  error={usernameError}
+                  helperText={
+                    usernameError
+                      ? 'ไม่สามารถใส่ตัวอักษรพิเศษหรือภาษาไทยได้'
+                      : ''
+                  }
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -76,6 +106,7 @@ export default function Register() {
                   label="รหัสผ่าน"
                   type="password"
                   id="password"
+                  error={passwordError}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -86,6 +117,8 @@ export default function Register() {
                   label="ยืนยันรหัสผ่าน"
                   type="password"
                   id="comfirmPassword"
+                  error={passwordError}
+                  helperText={passwordError ? 'รหัสผ่านไม่ตรงกัน' : ''}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
