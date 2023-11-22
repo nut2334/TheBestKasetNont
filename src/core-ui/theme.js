@@ -1,31 +1,10 @@
-import { createTheme } from "@material-ui/core/styles";
+import { createTheme } from '@mui/material/styles';
 
 const myTheme = createTheme({
-  root: {
-    display: "flex",
-  }, 
   typography: {
-    fontFamily: "Lato, Arial",
-    fontSize: 12,
-    h1: {
-      fontFamily: "Lato, Arial",
-      fontSize: 30,
-      fontWeight: 700,
-    },
-    h2: {
-      fontFamily: "Lato, Arial",
-      fontSize: 20,
-      fontWeight: 700,
-      paddingBottom: 20,
-    },
+    fontFamily: 'Kanit'
   },
-  overrides: {
-    MuiAppBar: {
-      colorPrimary: {
-        backgroundColor: "#green",
-      },
-    },
-  },
+  
 });
 
-export default createTheme(myTheme);
+export default myTheme;

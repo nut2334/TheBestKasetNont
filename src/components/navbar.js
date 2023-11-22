@@ -12,6 +12,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import { NavLink } from 'react-router-dom';
+import myTheme from '../core-ui/theme';
+import { ThemeProvider } from '@mui/material/styles';
 
 const pages = [{name: 'แผนที่', path :'/Map'},{name: 'ราคากลาง',path: '/Price'}];
 const settings = [{name:'เข้าสู่ระบบ',path:'/Login'}, {name:'สมัครสมาชิก',path:'/Register'},{name:'ลืมรหัสผ่าน',path:'/Forgot'}];
@@ -36,8 +38,8 @@ function Navbar() {
   };
 
   return (
-    
-    <AppBar position="static" sx={{ background: 'linear-gradient(0deg, rgba(206,222,189,1) 31%, rgba(250,241,228,1) 100%)' ,color:'#129549',}}>
+    <ThemeProvider theme={myTheme}>
+    <AppBar position="static" sx={{ background: 'linear-gradient(0deg, rgba(206,222,189,1) 31%, rgba(250,241,228,1) 100%)' ,color:'#129549'}} >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <IconButton sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}>
@@ -51,7 +53,6 @@ function Navbar() {
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'Kanit',
               fontWeight: 700,
               textDecoration: 'none',
               color: 'black'
@@ -105,7 +106,6 @@ function Navbar() {
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: 'Kanit',
               fontWeight: 700,
               textDecoration: 'none',
               color: 'black'
@@ -118,9 +118,9 @@ function Navbar() {
               <Button
                 key={index}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'black', display: 'block', fontFamily: 'Kanit'}}
+                sx={{ my: 2, color: 'black', display: 'block'}}
               >
-                <NavLink to={page.path} style={{ textDecoration: 'none' }}><Typography textAlign="center" sx={{fontFamily: 'Kanit' ,color: 'black'}}>{page.name}</Typography></NavLink>
+                <NavLink to={page.path} style={{ textDecoration: 'none' }}><Typography textAlign="center" sx={{color: 'black'}}>{page.name}</Typography></NavLink>
               </Button>
             ))}
           </Box>
@@ -154,7 +154,7 @@ function Navbar() {
             >
               {settings.map((setting,index) => (
                 <MenuItem key={index} onClick={handleCloseUserMenu}>
-                  <NavLink to={setting.path} style={{ textDecoration: 'none' }}><Typography textAlign="center" sx={{fontFamily: 'Kanit' ,color: 'black'}}>{setting.name}</Typography></NavLink>
+                  <NavLink to={setting.path} style={{ textDecoration: 'none' }}><Typography textAlign="center" sx={{color: 'black'}}>{setting.name}</Typography></NavLink>
                 </MenuItem>
               ))}
             </Menu>
@@ -162,6 +162,7 @@ function Navbar() {
         </Toolbar>
       </Container>
     </AppBar>
+    </ThemeProvider>
   );
 }
 export default Navbar;

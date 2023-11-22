@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react'
 import FacebookLogin from '@greatsumini/react-facebook-login';
 import axios from 'axios';
+import myTheme from '../core-ui/theme';
+import { ThemeProvider } from '@mui/material/styles';
 
 function Fackbook() {
   const [selectedOption, setSelectedOption] = useState('');
@@ -32,6 +34,7 @@ function Fackbook() {
   //https://graph.facebook.com/v18.0/109287808726963/feed?access_token=EAAD5mEv4dPEBO9Ds89ZB5Dnl5wyNXwW2B73DmewdU55SW469U9czjP9FxZAgxUtwC4x8KUexfN6jRZBEmeFQOUWpLCCqfTB97be6z9EptZCMbmTsb2Ndg68EG7q7xi4qZCvZB13M1EecCwkuZAkIaZCrKy7KDZAufL5Q0beZBfYsGCHUlyid4MEF0JzOOkA4O68jrlEzIDHSCEywcPlGYFZCr0VvkEZD
 
     return (
+        <ThemeProvider theme={myTheme}>
         <div>
           <select value={selectedOption} onChange={handleSelect}>
         <option value="">โปรดเลือก</option>
@@ -68,6 +71,7 @@ function Fackbook() {
             ))}
           </ul>
         </div>
+        </ThemeProvider>
     )
 }
 export default Fackbook

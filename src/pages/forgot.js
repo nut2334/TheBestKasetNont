@@ -9,11 +9,8 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-
-
-const defaultTheme = createTheme();
+import myTheme from '../core-ui/theme';
+import { ThemeProvider } from '@mui/material/styles';
 
 export default function Forgot() {
   const handleSubmit = (event) => {
@@ -26,7 +23,7 @@ export default function Forgot() {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={myTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

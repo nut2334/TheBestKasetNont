@@ -8,52 +8,31 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-const defaultTheme = createTheme();
+import { ThemeProvider } from '@mui/material/styles';
+import myTheme from '../core-ui/theme';
 
 export default function Register() {
-  const [passwordError, setPasswordError] = React.useState(false);
-  const [usernameError, setUsernameError] = React.useState(false);
-
-  const validateUsername = (value) => {
-    const regex = /^[a-zA-Z0-9]+$/;
-    return regex.test(value);
-  };
+  const [username, setUsername] = React.useState(true);
+  const [email, setEmail] = React.useState(true);
+  const [password, setPassword] = React.useState(true);
+  const [comfirmPassword, setComfirmPassword] = React.useState(true);
+  const [firstName, setFirstName] = React.useState(true);
+  const [lastName, setLastName] = React.useState(true);
+  const [tel, setTel] = React.useState(true);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
-    const password = data.get('password');
-    const confirmPassword = data.get('comfirmPassword');
-    const username = data.get('username');
-
-    if (!validateUsername(username)) {
-      setUsernameError(true);
-      return;
-    }
-    setUsernameError(false);
-    if (password !== confirmPassword) {
-      setPasswordError(true);
-      return;
-    }
-    setPasswordError(false);
-
-    console.log({
-      username: data.get('username'),
-      email: data.get('email'),
-      password: data.get('password'),
-      comfirmPassword: data.get('comfirmPassword'),
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
-      tel: data.get('tel'),
-    });
-    
+    setUsername(data.get('username'));
+    setEmail(data.get('email'));
+    setPassword(data.get('password'));
+    setComfirmPassword(data.get('comfirmPassword'));
+    setFirstName(data.get('firstName'));
+    setLastName(data.get('lastName'));
+    setTel(data.get('tel'));
   };
-
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={myTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -80,12 +59,8 @@ export default function Register() {
                   id="username"
                   label="Username"
                   autoFocus
-                  error={usernameError}
-                  helperText={
-                    usernameError
-                      ? 'ไม่สามารถใส่ตัวอักษรพิเศษหรือภาษาไทยได้'
-                      : ''
-                  }
+                  error={!username}
+                  helperText={!username ? 'กรุณากรอก Username' : ''}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -96,6 +71,8 @@ export default function Register() {
                   label="Email"
                   name="email"
                   autoComplete="email"
+                  error={!email}
+                  helperText={!email ? 'กรุณากรอก Email' : ''}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -106,7 +83,8 @@ export default function Register() {
                   label="รหัสผ่าน"
                   type="password"
                   id="password"
-                  error={passwordError}
+                  error={!password}
+                  helperText={!password ? 'กรุณากรอกรหัสผ่าน' : ''}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -117,8 +95,8 @@ export default function Register() {
                   label="ยืนยันรหัสผ่าน"
                   type="password"
                   id="comfirmPassword"
-                  error={passwordError}
-                  helperText={passwordError ? 'รหัสผ่านไม่ตรงกัน' : ''}
+                  error={!comfirmPassword}
+                  helperText={!comfirmPassword ? 'กรุณายืนยันรหัสผ่าน' : ''}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -129,6 +107,8 @@ export default function Register() {
                   fullWidth
                   id="firstName"
                   label="ชื่อ"
+                  error={!firstName}
+                  helperText={!firstName ? 'กรุณากรอกชื่อ' : ''}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -139,6 +119,8 @@ export default function Register() {
                   label="นามสกุล"
                   name="lastName"
                   autoComplete="family-name"
+                  error={!lastName}
+                  helperText={!lastName ? 'กรุณากรอกนามสกุล' : ''}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -149,6 +131,8 @@ export default function Register() {
                   label="เบอร์โทรศัพท์"
                   id="tel"
                   autoComplete="tel"
+                  error={!tel}
+                  helperText={!tel ? 'กรุณากรอกเบอร์โทรศัพท์' : ''}
                 />
               </Grid>
             </Grid>

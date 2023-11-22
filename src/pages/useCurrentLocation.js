@@ -63,7 +63,7 @@ const MarkersMap = () => {
           </button>
           {
             <p className="text-success ms-3">
-              My location is: {location.coordinates.lat} {location.coordinates.lng}
+              
             </p>
           }
         </div>
