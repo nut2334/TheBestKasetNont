@@ -73,13 +73,6 @@ export default function Register() {
         api = api + '/checkingemail';
         break;
     }
-    // if(jsonData.username == 'heart'){
-    //   setUsernameCheck(false);
-    //   console.log('heart');
-    // }
-    // else{
-    //   setUsernameCheck(true);
-    // }
     fetch(api, {
         method: 'POST',
         headers: {
@@ -89,7 +82,24 @@ export default function Register() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        switch(data) {
+          case data.username :
+            if(data.exist == false){
+              setUsernameCheck(false);
+            }
+            else{
+              setUsernameCheck(true);
+            }
+            break;
+          case data.email:
+            if(data.exist == false){
+              setEmailCheck(false);
+            }
+            else{
+              setEmailCheck(true);
+            }
+            break;
+        }
     })
     .catch(error => {
         console.error('Error:', error);
