@@ -21,6 +21,8 @@ export default function Register() {
   const [tel, setTel] = React.useState(true);
   const [usernameCheck, setUsernameCheck] = React.useState(true);
   const [emailCheck, setEmailCheck] = React.useState(true);
+  const [usernameReg, setUsernameReg] = React.useState(true);
+  const [emailReg, setEmailReg] = React.useState(true);
   const url = 'http://localhost:3001';
   
   const handleSubmit = (event) => {
@@ -38,14 +40,27 @@ export default function Register() {
     const userData = {
       username: event.target.value,
     };
-    sendToBackend(userData);
+    const reg = new RegExp("^[a-zA-Z0-9]{6,}$");
+    if(reg.test(userData.username)){
+      setUsernameReg(true);
+      sendToBackend(userData);
+    }
+    else{
+      setUsernameReg(false);
+    }
   }
   const onBlurEmail = (event) => {
     const userData = {
       email: event.target.value,
     };
-    const jsonData = JSON.stringify(userData);
-    sendToBackend(jsonData);
+    const emailRegExp = new RegExp("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$");
+    if(emailRegExp.test(userData.email)){
+      setEmailReg(true);
+      sendToBackend(userData);
+    }
+    else{
+      setEmailReg(false);
+    }
   }
   const sendToBackend = (jsonData) => {
     let api = url;
@@ -109,10 +124,11 @@ export default function Register() {
                   id="username"
                   label="Username"
                   autoFocus
-                  error={!username || !usernameCheck}
-                  helperText={!username ? 'กรุณากรอก Username' : '' || !usernameCheck ? 'Username นี้มีผู้ใช้งานแล้ว' : ''}
+                  error={!username || !usernameCheck || !usernameReg}
+                  helperText={!username ? 'กรุณากรอก Username' : '' || !usernameCheck ? 'Username นี้มีผู้ใช้งานแล้ว' : '' || !usernameReg ? 'ต้องมีอักษร 6 ตัวขึ้นไป' : ''}
                   onChange={(event) => setUsername(event.target.value)}
                   onBlur={onBlurUsername}
+                  placeholder="ห้ามเป็นภาษาไทย และอักขระพิเศษ"
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -123,8 +139,8 @@ export default function Register() {
                   label="Email"
                   name="email"
                   autoComplete="email"
-                  error={!email || !emailCheck}
-                  helperText={!email ? 'กรุณากรอก Email' : '' || !emailCheck ? 'Email นี้มีผู้ใช้งานแล้ว' : ''}
+                  error={!email || !emailCheck || !emailReg}
+                  helperText={!email ? 'กรุณากรอก Email' : '' || !emailCheck ? 'Email นี้มีผู้ใช้งานแล้ว' : '' || !emailReg ? 'กรุณากรอก Email ให้ถูกต้อง' : ''}
                   onChange={(event) => setEmail(event.target.value)}
                   onBlur={onBlurEmail}
                 />
