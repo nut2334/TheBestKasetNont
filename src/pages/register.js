@@ -19,7 +19,10 @@ export default function Register() {
   const [firstName, setFirstName] = React.useState(true);
   const [lastName, setLastName] = React.useState(true);
   const [tel, setTel] = React.useState(true);
-
+  const [usernameCheck, setUsernameCheck] = React.useState(true);
+  const [emailCheck, setEmailCheck] = React.useState(true);
+  const url = 'http://localhost:3001';
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -31,6 +34,53 @@ export default function Register() {
     setLastName(data.get('lastName'));
     setTel(data.get('tel'));
   };
+  const onBlurUsername = (event) => {
+    const userData = {
+      username: event.target.value,
+    };
+    sendToBackend(userData);
+  }
+  const onBlurEmail = (event) => {
+    const userData = {
+      email: event.target.value,
+    };
+    const jsonData = JSON.stringify(userData);
+    sendToBackend(jsonData);
+  }
+  const sendToBackend = (jsonData) => {
+    let api = url;
+    console.log(jsonData.username);
+    switch(jsonData) {
+      case jsonData.username :
+        api = api + '/checkinguser';
+        break;
+      case jsonData.email:
+        api = api + '/checkingemail';
+        break;
+    }
+    // if(jsonData.username == 'heart'){
+    //   setUsernameCheck(false);
+    //   console.log('heart');
+    // }
+    // else{
+    //   setUsernameCheck(true);
+    // }
+    fetch(api, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: jsonData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+  }
+
   return (
     <ThemeProvider theme={myTheme}>
       <Container component="main" maxWidth="xs">
@@ -59,8 +109,10 @@ export default function Register() {
                   id="username"
                   label="Username"
                   autoFocus
-                  error={!username}
-                  helperText={!username ? 'กรุณากรอก Username' : ''}
+                  error={!username || !usernameCheck}
+                  helperText={!username ? 'กรุณากรอก Username' : '' || !usernameCheck ? 'Username นี้มีผู้ใช้งานแล้ว' : ''}
+                  onChange={(event) => setUsername(event.target.value)}
+                  onBlur={onBlurUsername}
                 />
                 </Grid>
                 <Grid item xs={12}>
@@ -71,8 +123,10 @@ export default function Register() {
                   label="Email"
                   name="email"
                   autoComplete="email"
-                  error={!email}
-                  helperText={!email ? 'กรุณากรอก Email' : ''}
+                  error={!email || !emailCheck}
+                  helperText={!email ? 'กรุณากรอก Email' : '' || !emailCheck ? 'Email นี้มีผู้ใช้งานแล้ว' : ''}
+                  onChange={(event) => setEmail(event.target.value)}
+                  onBlur={onBlurEmail}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -95,7 +149,7 @@ export default function Register() {
                   label="ยืนยันรหัสผ่าน"
                   type="password"
                   id="comfirmPassword"
-                  error={!comfirmPassword}
+                  error={!comfirmPassword }
                   helperText={!comfirmPassword ? 'กรุณายืนยันรหัสผ่าน' : ''}
                 />
               </Grid>
