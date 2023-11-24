@@ -17,20 +17,33 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 export default function Register() {
   const [username, setUsername] = React.useState(true);
-  const [email, setEmail] = React.useState(true);
-  const [password, setPassword] = React.useState(true);
-  const [comfirmPassword, setComfirmPassword] = React.useState(true);
-  const [passwordCheck, setPasswordCheck] = React.useState(true);
-  const [comfirmPasswordCheck, setComfirmPasswordCheck] = React.useState(true);
-  const [firstName, setFirstName] = React.useState(true);
-  const [lastName, setLastName] = React.useState(true);
-  const [tel, setTel] = React.useState(true);
   const [usernameCheck, setUsernameCheck] = React.useState(true);
-  const [emailCheck, setEmailCheck] = React.useState(true);
   const [usernameReg, setUsernameReg] = React.useState(true);
+
+  const [email, setEmail] = React.useState(true);
+  const [emailCheck, setEmailCheck] = React.useState(true);
   const [emailReg, setEmailReg] = React.useState(true);
+
+  const [password, setPassword] = React.useState(true);
+  const [passwordCheck, setPasswordCheck] = React.useState(true);
+
+  const [comfirmPassword, setComfirmPassword] = React.useState(true);
+  const [comfirmPasswordCheck, setComfirmPasswordCheck] = React.useState(true);
+
   const [showPassword, setShowPassword] = React.useState(false);
   const [showComfirmPassword, setShowComfirmPassword] = React.useState(false);
+
+  const [firstName, setFirstName] = React.useState(true);
+  const [firstNameLang, setFirstNameLang] = React.useState("");
+  const [firstNameValidate, setFirstNameValidate] = React.useState(true);
+
+  const [lastName, setLastName] = React.useState(true);
+  const [lastNameLang, setLastNameLang] = React.useState("");
+  const [lastNameValidate, setLastNameValidate] = React.useState(true);
+
+  const [tel, setTel] = React.useState(true);
+  const [telValidate, setTelValidate] = React.useState(true);
+
   const url = "http://localhost:3001";
 
   const handleClickShowPassword = () => {
@@ -55,6 +68,31 @@ export default function Register() {
     setFirstName(data.get("firstName"));
     setLastName(data.get("lastName"));
     setTel(data.get("tel"));
+
+    if( usernameCheck && emailCheck && passwordCheck && comfirmPasswordCheck && firstNameValidate && lastNameValidate && telValidate){
+      const userData = {
+        username: data.get("username"),
+        email: data.get("email"),
+        password: data.get("password"),
+        firstName: data.get("firstName"),
+        lastName: data.get("lastName"),
+        tel: data.get("tel"),
+      };
+      fetch(url + "/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
   const onBlurUsername = (event) => {
     const userData = {
@@ -85,25 +123,66 @@ export default function Register() {
   const validatePassword = (event) => {
     const regExp = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
     if (regExp.test(event.target.value)) {
-      console.log("true");
       setPasswordCheck(true);
     } else {
-      console.log("false");
       setPasswordCheck(false);
     }
   };
+
   const checkComfirmPassword = (event) => {
-    if (event.target.value === password) {
-      console.log("true");
+    if (event.target.value == password) {
       setComfirmPasswordCheck(true);
     } else {
-      console.log("false");
       setComfirmPasswordCheck(false);
     }
-  }
+  };
+  const checkLang = (event) => {
+    const thaiRegExp = /^[ก-๏เ-๙]+$/;
+    const englishRegExp = /^[a-zA-Z]+$/;
+
+    switch (event.target.id) {
+      case "firstName":
+        let isFirstNameThai = thaiRegExp.test(event.target.value);
+        let isFirstNameEnglish = englishRegExp.test(event.target.value);
+
+        if (isFirstNameThai) {
+          setFirstNameLang("thai");
+          setFirstNameValidate(true);
+        } else if (isFirstNameEnglish) {
+          setFirstNameLang("english");
+          setFirstNameValidate(true);
+        } else {
+          setFirstNameValidate(false);
+        }
+        break;
+      case "lastName":
+        let isLastNameThai = thaiRegExp.test(event.target.value);
+        let isLastNameEnglish = englishRegExp.test(event.target.value);
+
+        if (isLastNameThai) {
+          setLastNameLang("thai");
+          setLastNameValidate(true);
+        } else if (isLastNameEnglish) {
+          setLastNameLang("english");
+          setLastNameValidate(true);
+        } else {
+          setLastNameValidate(false);
+        }
+        break;
+    }
+  };
+
+  const validateTel = (event) => {
+    const regExp = /^0[0-9]{9}$/;
+    if (regExp.test(event.target.value)) {
+      setTelValidate(true);
+    } else {
+      setTelValidate(false);
+    }
+  };
+
   const sendToBackend = (jsonData) => {
     let api = url;
-    console.log(jsonData.username);
     switch (jsonData) {
       case jsonData.username:
         api = api + "/checkinguser";
@@ -123,7 +202,7 @@ export default function Register() {
       .then((data) => {
         switch (data) {
           case data.username:
-            if (data.exist === false) {
+            if (data.exist == false) {
               setUsernameCheck(false);
             } else {
               setUsernameCheck(true);
@@ -142,7 +221,7 @@ export default function Register() {
         console.error("Error:", error);
       });
   };
-  
+
   return (
     <ThemeProvider theme={myTheme}>
       <Container component="main" maxWidth="xs">
@@ -218,7 +297,13 @@ export default function Register() {
                   onBlur={validatePassword}
                   error={!password || !passwordCheck}
                   fullWidth
-                  helperText={!password ? "กรุณากรอกรหัสผ่าน" : "" || !passwordCheck ? "ต้องมีตัวอักษร 8 ตัวขึ้นไป และมีตัวเลขอย่างน้อย 1 ตัว" : ""}
+                  helperText={
+                    !password
+                      ? "กรุณากรอกรหัสผ่าน"
+                      : "" || !passwordCheck
+                      ? "ต้องมีตัวอักษร 8 ตัวขึ้นไป และมีตัวเลขอย่างน้อย 1 ตัว"
+                      : ""
+                  }
                   id="password"
                   required
                   label="รหัสผ่าน"
@@ -246,7 +331,11 @@ export default function Register() {
                   error={!comfirmPassword || !comfirmPasswordCheck}
                   fullWidth
                   helperText={
-                    !comfirmPassword ? "กรุณายืนยันรหัสผ่าน" : "" || !comfirmPasswordCheck ? "รหัสผ่านไม่ตรงกัน" : ""
+                    !comfirmPassword
+                      ? "กรุณายืนยันรหัสผ่าน"
+                      : "" || !comfirmPasswordCheck
+                      ? "รหัสผ่านไม่ตรงกัน"
+                      : ""
                   }
                   id="comfirmPassword"
                   required
@@ -269,42 +358,61 @@ export default function Register() {
                         </IconButton>
                       </InputAdornment>
                     ),
-                  }}/>
+                  }}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  onChange={(event) => setFirstName(event.target.value)}
+                  onBlur={(event) => checkLang(event)}
                   autoComplete="given-name"
                   name="firstName"
                   required
                   fullWidth
                   id="firstName"
                   label="ชื่อ"
-                  error={!firstName}
-                  helperText={!firstName ? "กรุณากรอกชื่อ" : ""}
+                  error={!firstName || !firstNameValidate}
+                  helperText={
+                    !firstName
+                      ? "กรุณากรอกชื่อ"
+                      : "" || !firstNameValidate
+                      ? "ชื่อต้องเป็นภาษาไทย หรือ ภาษาอังกฤษ"
+                      : ""
+                  }
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  onChange={(event) => setLastName(event.target.value)}
+                  onBlur={(event) => checkLang(event)}
                   required
                   fullWidth
                   id="lastName"
                   label="นามสกุล"
                   name="lastName"
                   autoComplete="family-name"
-                  error={!lastName}
-                  helperText={!lastName ? "กรุณากรอกนามสกุล" : ""}
+                  error={!lastName || !lastNameValidate}
+                  helperText={
+                    !lastName
+                      ? "กรุณากรอกนามสกุล"
+                      : "" || !lastNameValidate
+                      ? "นามสกุลต้องเป็นภาษาไทย หรือ ภาษาอังกฤษ"
+                      : ""
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  onChange={(event) => setTel(event.target.value)}
+                  onBlur={validateTel}
                   required
                   fullWidth
                   name="tel"
                   label="เบอร์โทรศัพท์"
                   id="tel"
                   autoComplete="tel"
-                  error={!tel}
-                  helperText={!tel ? "กรุณากรอกเบอร์โทรศัพท์" : ""}
+                  error={!tel || !telValidate}
+                  helperText={!tel ? "กรุณากรอกเบอร์โทรศัพท์" : "" || !telValidate ? "เบอร์โทรศัพท์ไม่ถูกต้อง" : "" }
                 />
               </Grid>
             </Grid>
