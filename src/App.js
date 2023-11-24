@@ -18,7 +18,7 @@ function App() {
           <Route path="/" element={<Fackbook />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Register" element={<Register />} />
-          <Route path="/Forgot" element={<Forgot />} />
+          <Route path="/Forgot" element={<For got />} />
           <Route path="/Map" element={<MarkersMap/>} />
           <Route path="/Price" element={<Price/>} />
         </Routes>
