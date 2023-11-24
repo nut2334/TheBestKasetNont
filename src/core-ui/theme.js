@@ -4,7 +4,6 @@ const myTheme = createTheme({
   typography: {
     fontFamily: 'Kanit'
   },
-  
 });
 
 export default myTheme;
