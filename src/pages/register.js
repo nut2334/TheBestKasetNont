@@ -71,13 +71,14 @@ export default function Register() {
 
     if( usernameCheck && emailCheck && passwordCheck && comfirmPasswordCheck && firstNameValidate && lastNameValidate && telValidate){
       const userData = {
-        username: data.get("username"),
-        email: data.get("email"),
-        password: data.get("password"),
-        firstName: data.get("firstName"),
-        lastName: data.get("lastName"),
-        tel: data.get("tel"),
+        username: username,
+        email: email,
+        password: password,
+        firstName: firstName,
+        lastName: lastName,
+        tel: tel,
       };
+      console.log(userData);
       fetch(url + "/register", {
         method: "POST",
         headers: {
@@ -98,6 +99,7 @@ export default function Register() {
     const userData = {
       username: event.target.value,
     };
+    console.log(userData); 
     const reg = new RegExp("^[a-zA-Z0-9]{6,}$");
     if (reg.test(userData.username)) {
       setUsernameReg(true);
@@ -110,6 +112,7 @@ export default function Register() {
     const userData = {
       email: event.target.value,
     };
+    console.log(userData);
     const emailRegExp = new RegExp(
       "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$"
     );
@@ -326,7 +329,7 @@ export default function Register() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  onChange={(event) => setComfirmPassword(event.target.value)}
+                  onChange={(event) => {setComfirmPassword(event.target.value)}}
                   onBlur={checkComfirmPassword}
                   error={!comfirmPassword || !comfirmPasswordCheck}
                   fullWidth
