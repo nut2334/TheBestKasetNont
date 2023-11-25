@@ -34,12 +34,12 @@ export default function Register() {
   const [showComfirmPassword, setShowComfirmPassword] = React.useState(false);
 
   const [firstName, setFirstName] = React.useState(true);
-  const [firstNameLang, setFirstNameLang] = React.useState("");
   const [firstNameValidate, setFirstNameValidate] = React.useState(true);
 
   const [lastName, setLastName] = React.useState(true);
-  const [lastNameLang, setLastNameLang] = React.useState("");
   const [lastNameValidate, setLastNameValidate] = React.useState(true);
+
+  const [sameLang,setSameLang] = React.useState(true);
 
   const [tel, setTel] = React.useState(true);
   const [telValidate, setTelValidate] = React.useState(true);
@@ -143,35 +143,39 @@ export default function Register() {
     const thaiRegExp = /^[ก-๏เ-๙]+$/;
     const englishRegExp = /^[a-zA-Z]+$/;
 
+    let isFirstNameThai = thaiRegExp.test(event.target.value);
+    let isFirstNameEnglish = englishRegExp.test(event.target.value);
+    let isLastNameThai = thaiRegExp.test(event.target.value);
+    let isLastNameEnglish = englishRegExp.test(event.target.value);
+    
     switch (event.target.id) {
       case "firstName":
-        let isFirstNameThai = thaiRegExp.test(event.target.value);
-        let isFirstNameEnglish = englishRegExp.test(event.target.value);
-
         if (isFirstNameThai) {
-          setFirstNameLang("thai");
           setFirstNameValidate(true);
         } else if (isFirstNameEnglish) {
-          setFirstNameLang("english");
           setFirstNameValidate(true);
         } else {
           setFirstNameValidate(false);
         }
         break;
       case "lastName":
-        let isLastNameThai = thaiRegExp.test(event.target.value);
-        let isLastNameEnglish = englishRegExp.test(event.target.value);
-
         if (isLastNameThai) {
-          setLastNameLang("thai");
           setLastNameValidate(true);
         } else if (isLastNameEnglish) {
-          setLastNameLang("english");
           setLastNameValidate(true);
         } else {
           setLastNameValidate(false);
         }
         break;
+    }
+    if (thaiRegExp.test(firstName) && thaiRegExp.test(lastName)) {
+      setSameLang(true);
+    }
+    else if (englishRegExp.test(firstName) && englishRegExp.test(lastName)) {
+      setSameLang(true);
+    }
+    else {
+      setSameLang(false);
     }
   };
 
@@ -237,7 +241,7 @@ export default function Register() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: 'green' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -329,7 +333,7 @@ export default function Register() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                  onChange={(event) => {setComfirmPassword(event.target.value)}}
+                  onChange={(event) => setComfirmPassword(event.target.value)}
                   onBlur={checkComfirmPassword}
                   error={!comfirmPassword || !comfirmPasswordCheck}
                   fullWidth
@@ -374,13 +378,13 @@ export default function Register() {
                   fullWidth
                   id="firstName"
                   label="ชื่อ"
-                  error={!firstName || !firstNameValidate}
+                  error={!firstName || !firstNameValidate || !sameLang}
                   helperText={
                     !firstName
                       ? "กรุณากรอกชื่อ"
                       : "" || !firstNameValidate
                       ? "ชื่อต้องเป็นภาษาไทย หรือ ภาษาอังกฤษ"
-                      : ""
+                      : "" 
                   }
                 />
               </Grid>
@@ -394,13 +398,13 @@ export default function Register() {
                   label="นามสกุล"
                   name="lastName"
                   autoComplete="family-name"
-                  error={!lastName || !lastNameValidate}
+                  error={!lastName || !lastNameValidate || !sameLang}
                   helperText={
                     !lastName
                       ? "กรุณากรอกนามสกุล"
                       : "" || !lastNameValidate
                       ? "นามสกุลต้องเป็นภาษาไทย หรือ ภาษาอังกฤษ"
-                      : ""
+                      : "" || !sameLang ? "ชื่อและนามสกุลต้องเป็นภาษาเดียวกัน" : ""
                   }
                 />
               </Grid>
@@ -424,6 +428,7 @@ export default function Register() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              style={{ backgroundColor: "green", color: "#fff" }}
             >
               ยืนยัน
             </Button>
