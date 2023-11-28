@@ -13,15 +13,57 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import myTheme from '../core-ui/theme';
+import { IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 export default function Login() {
+  const [username, setUsername] = React.useState(true);
+  const [usernameReg, setUsernameReg] = React.useState(true);
+  const [password, setPassword] = React.useState(true); 
+  const url = "http://localhost:3001";
+
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = () => setShowPassword(!showPassword);
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    setUsername(data.get("username"));
+    setPassword(data.get("password"));
+    if(usernameReg){
+      const userData = {
+        username: username,
+        password: password,
+      };
+      console.log(userData);
+      fetch(url + "/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+          if (data.exist == false) {
+            alert("Username หรือ Password ไม่ถูกต้อง");
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  };
+
+  const onBlurUsername = () => {
+    const reg = new RegExp("^[a-zA-Z0-9]{6,}$");
+    if (reg.test(username)) {
+      setUsernameReg(true);
+    } else {
+      setUsernameReg(false);
+    }
   };
 
   return (
@@ -30,13 +72,13 @@ export default function Login() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop:1,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'green' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -47,43 +89,67 @@ export default function Login() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
               autoFocus
+              error={!username || !usernameReg}
+              helperText={
+                !username
+                  ? "กรุณากรอก Username"
+                  : "" || !usernameReg
+                  ? "ห้ามเป็นภาษาไทย และอักขระพิเศษ"
+                  : ""
+              }
+              onChange={(event) => setUsername(event.target.value)}
+              onBlur={onBlurUsername}
             />
             <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
+                  onChange={(event) => setPassword(event.target.value)}
+                  error={!password }
+                  fullWidth
+                  helperText={
+                    !password
+                      ? "กรุณากรอกรหัสผ่าน"
+                      : "" 
+                  }
+                  id="password"
+                  required
+                  label="รหัสผ่าน"
+                  variant="outlined"
+                  type={showPassword ? "text" : "password"}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="จดจำฉันไว้ในระบบ"
             />
             <Button
               type="submit"
               fullWidth
+              color="secondary"
               variant="contained"
-              sx={{ mt: 3, mb: 2, backgroundColor: '#00C300', color: '#fff' }}
+              sx={{ mt: 3, mb: 2, color: '#fff' }}
             >
               เข้าสู่ระบบ
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="#" variant="body2" sx={{color: 'green'}}>
+                  ลืมรหัสผ่าน?
                 </Link>
               </Grid>
             </Grid>
