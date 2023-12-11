@@ -10,6 +10,8 @@ import MarkersMap from './pages/useCurrentLocation'
 import Price from './pages/price'
 import './core-ui/App.css';
 
+
+
 function App() {
   return (
       <HashRouter>
