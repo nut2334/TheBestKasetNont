@@ -39,7 +39,7 @@ export default function Register() {
   const [lastName, setLastName] = React.useState(true);
   const [lastNameValidate, setLastNameValidate] = React.useState(true);
 
-  const [sameLang,setSameLang] = React.useState(true);
+  const [sameLang, setSameLang] = React.useState(true);
 
   const [tel, setTel] = React.useState(true);
   const [telValidate, setTelValidate] = React.useState(true);
@@ -69,7 +69,15 @@ export default function Register() {
     setLastName(data.get("lastName"));
     setTel(data.get("tel"));
 
-    if( usernameCheck && emailCheck && passwordCheck && comfirmPasswordCheck && firstNameValidate && lastNameValidate && telValidate){
+    if (
+      usernameCheck &&
+      emailCheck &&
+      passwordCheck &&
+      comfirmPasswordCheck &&
+      firstNameValidate &&
+      lastNameValidate &&
+      telValidate
+    ) {
       const userData = {
         username: username,
         email: email,
@@ -78,7 +86,6 @@ export default function Register() {
         lastName: lastName,
         tel: tel,
       };
-      console.log(userData);
       fetch(url + "/register", {
         method: "POST",
         headers: {
@@ -99,7 +106,6 @@ export default function Register() {
     const userData = {
       username: event.target.value,
     };
-    console.log(userData); 
     const reg = new RegExp("^[a-zA-Z0-9]{6,}$");
     if (reg.test(userData.username)) {
       setUsernameReg(true);
@@ -112,7 +118,6 @@ export default function Register() {
     const userData = {
       email: event.target.value,
     };
-    console.log(userData);
     const emailRegExp = new RegExp(
       "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$"
     );
@@ -147,7 +152,7 @@ export default function Register() {
     let isFirstNameEnglish = englishRegExp.test(event.target.value);
     let isLastNameThai = thaiRegExp.test(event.target.value);
     let isLastNameEnglish = englishRegExp.test(event.target.value);
-    
+
     switch (event.target.id) {
       case "firstName":
         if (isFirstNameThai) {
@@ -170,11 +175,9 @@ export default function Register() {
     }
     if (thaiRegExp.test(firstName) && thaiRegExp.test(lastName)) {
       setSameLang(true);
-    }
-    else if (englishRegExp.test(firstName) && englishRegExp.test(lastName)) {
+    } else if (englishRegExp.test(firstName) && englishRegExp.test(lastName)) {
       setSameLang(true);
-    }
-    else {
+    } else {
       setSameLang(false);
     }
   };
@@ -235,13 +238,13 @@ export default function Register() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 0,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'green' }}>
+          <Avatar sx={{ m: 1, bgcolor: "green" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -384,7 +387,7 @@ export default function Register() {
                       ? "กรุณากรอกชื่อ"
                       : "" || !firstNameValidate
                       ? "ชื่อต้องเป็นภาษาไทย หรือ ภาษาอังกฤษ"
-                      : "" 
+                      : ""
                   }
                 />
               </Grid>
@@ -404,7 +407,9 @@ export default function Register() {
                       ? "กรุณากรอกนามสกุล"
                       : "" || !lastNameValidate
                       ? "นามสกุลต้องเป็นภาษาไทย หรือ ภาษาอังกฤษ"
-                      : "" || !sameLang ? "ชื่อและนามสกุลต้องเป็นภาษาเดียวกัน" : ""
+                      : "" || !sameLang
+                      ? "ชื่อและนามสกุลต้องเป็นภาษาเดียวกัน"
+                      : ""
                   }
                 />
               </Grid>
@@ -419,7 +424,13 @@ export default function Register() {
                   id="tel"
                   autoComplete="tel"
                   error={!tel || !telValidate}
-                  helperText={!tel ? "กรุณากรอกเบอร์โทรศัพท์" : "" || !telValidate ? "เบอร์โทรศัพท์ไม่ถูกต้อง" : "" }
+                  helperText={
+                    !tel
+                      ? "กรุณากรอกเบอร์โทรศัพท์"
+                      : "" || !telValidate
+                      ? "เบอร์โทรศัพท์ไม่ถูกต้อง"
+                      : ""
+                  }
                 />
               </Grid>
             </Grid>
@@ -427,8 +438,9 @@ export default function Register() {
               type="submit"
               fullWidth
               variant="contained"
+              color="secondary"
               sx={{ mt: 3, mb: 2 }}
-              style={{ backgroundColor: "green", color: "#fff" }}
+              style={{ color: "#fff" }}
             >
               ยืนยัน
             </Button>
