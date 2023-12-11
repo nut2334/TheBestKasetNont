@@ -86,7 +86,6 @@ export default function Register() {
         lastName: lastName,
         tel: tel,
       };
-      console.log(userData);
       fetch(url + "/register", {
         method: "POST",
         headers: {
@@ -107,7 +106,6 @@ export default function Register() {
     const userData = {
       username: event.target.value,
     };
-    console.log(userData);
     const reg = new RegExp("^[a-zA-Z0-9]{6,}$");
     if (reg.test(userData.username)) {
       setUsernameReg(true);
@@ -120,7 +118,6 @@ export default function Register() {
     const userData = {
       email: event.target.value,
     };
-    console.log(userData);
     const emailRegExp = new RegExp(
       "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$"
     );

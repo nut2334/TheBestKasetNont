@@ -5,8 +5,13 @@ const myTheme = createTheme({
     fontFamily: 'Kanit'
   },
   palette: {
-    secondary: {
+    primary: {
       main: '#00B25A',
+      contrastText: '#FFFFFF',
+    },
+    secondary: {
+      main: '#3081D0',
+      contrastText: '#FFFFFF',
     },
   },
 });

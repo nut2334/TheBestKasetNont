@@ -5,7 +5,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -15,6 +14,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import myTheme from '../core-ui/theme';
 import { IconButton, InputAdornment } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { NavLink } from 'react-router-dom';
 
 export default function Login() {
   const [username, setUsername] = React.useState(true);
@@ -93,7 +93,6 @@ export default function Login() {
               label="Username"
               name="username"
               autoComplete="username"
-              autoFocus
               error={!username || !usernameReg}
               helperText={
                 !username
@@ -140,7 +139,7 @@ export default function Login() {
             <Button
               type="submit"
               fullWidth
-              color="secondary"
+              color="primary"
               variant="contained"
               sx={{ mt: 3, mb: 2, color: '#fff' }}
             >
@@ -148,9 +147,9 @@ export default function Login() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2" sx={{color: 'green'}}>
+              <NavLink to="/Forgot" style={{ textDecoration: 'none' }}>
                   ลืมรหัสผ่าน?
-                </Link>
+                </NavLink>
               </Grid>
             </Grid>
           </Box>
