@@ -14,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import axios from 'axios';
 
 export default function Register() {
   const [username, setUsername] = React.useState(true);
@@ -106,7 +107,7 @@ export default function Register() {
     const userData = {
       username: event.target.value,
     };
-    const reg = new RegExp("^[a-zA-Z0-9]{6,}$");
+    const reg = new RegExp("^[a-zA-Z0-9_]{6,}$");
     if (reg.test(userData.username)) {
       setUsernameReg(true);
       sendToBackend(userData);
@@ -193,43 +194,50 @@ export default function Register() {
 
   const sendToBackend = (jsonData) => {
     let api = url;
-    switch (jsonData) {
-      case jsonData.username:
-        api = api + "/checkinguser";
-        break;
-      case jsonData.email:
-        api = api + "/checkingemail";
-        break;
+    if (jsonData.hasOwnProperty("username")) {
+      api = api + "/checkinguser";
+    } else if (jsonData.hasOwnProperty("email")) {
+          api = api + "/checkingemail";
     }
-    fetch(api, {
-      method: "POST",
+    console.log(api);
+    axios.post(api,jsonData , {
       headers: {
-        "Content-Type": "application/json",
-      },
-      body: jsonData,
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        switch (data) {
-          case data.username:
-            if (data.exist == false) {
-              setUsernameCheck(false);
-            } else {
-              setUsernameCheck(true);
-            }
-            break;
-          case data.email:
-            if (data.exist === false) {
-              setEmailCheck(false);
-            } else {
-              setEmailCheck(true);
-            }
-            break;
-        }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+        // Overwrite Axios's automatically set Content-Type
+        'Content-Type': 'application/json'
+      }
+    }).then(response => {
+      console.log(response.data)
+    });
+
+    // fetch(api, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: jsonData,
+    // })
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     switch (data) {
+    //       case data.username:
+    //         if (data.exist == false) {
+    //           setUsernameCheck(false);
+    //         } else {
+    //           setUsernameCheck(true);
+    //         }
+    //         break;
+    //       case data.email:
+    //         if (data.exist === false) {
+    //           setEmailCheck(false);
+    //         } else {
+    //           setEmailCheck(true);
+    //         }
+    //         break;
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error:", error);
+    //   });
   };
 
   return (

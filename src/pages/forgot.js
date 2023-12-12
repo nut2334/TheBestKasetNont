@@ -11,13 +11,15 @@ import myTheme from "../core-ui/theme";
 import { ThemeProvider } from "@mui/material/styles";
 
 export default function Forgot() {
+  const [email, setEmail] = React.useState(true);
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    setEmail(data.get("email"));
+    const userData = {
+      email: email,
+    };
+    
   };
 
   return (
