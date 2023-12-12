@@ -13,6 +13,8 @@ import BasicTabs from "./components/tab_login";
 import LabTabs from "./components/tab_product";
 import AddProduct from "./pages/add-product";
 
+
+
 function App() {
   return (
     <HashRouter>
