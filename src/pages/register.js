@@ -207,7 +207,7 @@ export default function Register() {
       }
     }).then(response => {
       console.log(response.data)
-      if (response.data.exist == false) {
+      if (response.data.same == false) {
         if (response.data.username) {
           setUsernameCheck(false);
         } else if (response.data.email) {

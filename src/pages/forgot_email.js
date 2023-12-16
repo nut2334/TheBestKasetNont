@@ -19,7 +19,6 @@ export default function Forgot() {
     const userData = {
       email: email,
     };
-    
   };
 
   return (
@@ -34,7 +33,7 @@ export default function Forgot() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: "primary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -51,7 +50,7 @@ export default function Forgot() {
               required
               fullWidth
               id="email"
-              label="Username หรือ Email"
+              label="Email"
               name="email"
               autoComplete="email"
               autoFocus
@@ -61,9 +60,9 @@ export default function Forgot() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 ,color:'white'}}
-              color="secondary"
+              color="primary"
             >
-              ลืมรหัสผ่าน
+              ถัดไป
             </Button>
           </Box>
         </Box>

@@ -1,7 +1,7 @@
 import Navbar from "./components/navbar";
 import Login from "./pages/login";
 import Register from "./pages/register";
-import Forgot from "./pages/forgot";
+import Forgot from "./pages/forgot_email";
 import React from "react";
 import Fackbook from "./pages/facebook";
 import { HashRouter, Route, Routes } from "react-router-dom";
