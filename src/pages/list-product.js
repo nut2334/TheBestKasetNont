@@ -87,7 +87,7 @@ const Listproduct = () => {
     </Grid>
     <Grid item xs={12} sm={6}>
     <Button variant="contained" color='secondary' startIcon={<SearchIcon />} style={{ marginRight: '8px' }}>ค้นหา</Button>
-    <NavLink to="/AddProduct">
+    <NavLink to="/Product">
     <Button variant="contained" color='primary' startIcon={<AddIcon />}>เพิ่มสินค้า</Button>
     </NavLink>
     </Grid>

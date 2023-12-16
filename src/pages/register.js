@@ -207,37 +207,20 @@ export default function Register() {
       }
     }).then(response => {
       console.log(response.data)
+      if (response.data.exist == false) {
+        if (response.data.username) {
+          setUsernameCheck(false);
+        } else if (response.data.email) {
+          setEmailCheck(false);
+        }
+      } else {
+        if (response.data.username) {
+          setUsernameCheck(true);
+        } else if (response.data.email) {
+          setEmailCheck(true);
+        }
+      }
     });
-
-    // fetch(api, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: jsonData,
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     switch (data) {
-    //       case data.username:
-    //         if (data.exist == false) {
-    //           setUsernameCheck(false);
-    //         } else {
-    //           setUsernameCheck(true);
-    //         }
-    //         break;
-    //       case data.email:
-    //         if (data.exist === false) {
-    //           setEmailCheck(false);
-    //         } else {
-    //           setEmailCheck(true);
-    //         }
-    //         break;
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error:", error);
-    //   });
   };
 
   return (
