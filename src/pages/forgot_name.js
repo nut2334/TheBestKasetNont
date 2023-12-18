@@ -1,55 +1,52 @@
-import React from 'react'
+import React from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import myTheme from '../core-ui/theme';
-import { ThemeProvider } from '@mui/material/styles';
+import myTheme from "../core-ui/theme";
+import { ThemeProvider } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 
+const ForgotName = ({ email, onPrev, onNext }) => {
+  const [firstName, setFirstName] = React.useState(true);
+  const [lastName, setLastName] = React.useState(true);
 
-const ForgotName = ({email,onPrev,onNext}) => {
-    const [firstName, setFirstName] = React.useState(true);
-    const [lastName, setLastName] = React.useState(true);
-    
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        if (typeof firstName !== 'string' || firstName.trim() === '') {
-            alert('กรุณากรอกชื่อ');
-            return;
-        }
-        if (typeof lastName !== 'string' || lastName.trim() === '') {
-            alert('กรุณากรอกนามสกุล');
-            return;
-        }
-        fetch("http://localhost:3001/forgot", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: email,
-                firstName: firstName,
-                lastName: lastName,
-            }),
-        }).then((response) => response.json())
-        .then((data) => {
-            console.log("Success:", data);
-            if (data.email == false) {
-                alert("โปรดป้อนอีเมลที่ถูกต้อง");
-                onPrev();
-
-            }
-            else if (data.name == false) {
-                onNext();
-            }
-        })
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (typeof firstName !== "string" || firstName.trim() === "") {
+      alert("กรุณากรอกชื่อ");
+      return;
     }
-    return (
-        <ThemeProvider theme={myTheme}>
-        <Container component="main" maxWidth="xs">
+    if (typeof lastName !== "string" || lastName.trim() === "") {
+      alert("กรุณากรอกนามสกุล");
+      return;
+    }
+    fetch("http://localhost:3001/forgot", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        if (data.name == false) {
+          onNext();
+        } else {
+          alert("สำเร็จ! กรุณาตรวจสอบอีเมลของคุณ");
+        }
+      });
+  };
+  return (
+    <ThemeProvider theme={myTheme}>
+      <Container component="main" maxWidth="xs">
         <Box
           sx={{
             marginTop: 8,
@@ -65,11 +62,7 @@ const ForgotName = ({email,onPrev,onNext}) => {
           <Typography component="h1" variant="h5">
             ลืมรหัสผ่าน
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            sx={{ mt: 1 }}
-          >
+          <Box component="form" noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -93,7 +86,7 @@ const ForgotName = ({email,onPrev,onNext}) => {
             <Button
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 ,color:'white'}}
+              sx={{ mt: 3, mb: 2, color: "white" }}
               color="primary"
               type="submit"
             >
@@ -101,9 +94,9 @@ const ForgotName = ({email,onPrev,onNext}) => {
             </Button>
           </Box>
         </Box>
-        </Container>
-        </ThemeProvider>
-    )
-}
+      </Container>
+    </ThemeProvider>
+  );
+};
 
-export default ForgotName
+export default ForgotName;
