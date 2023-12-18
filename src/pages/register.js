@@ -429,7 +429,7 @@ export default function Register() {
               type="submit"
               fullWidth
               variant="contained"
-              color="secondary"
+              color="primary"
               sx={{ mt: 3, mb: 2 }}
               style={{ color: "#fff" }}
             >

@@ -7,18 +7,18 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import myTheme from "../core-ui/theme";
-import { ThemeProvider } from "@mui/material/styles";
+import myTheme from '../core-ui/theme';
+import { ThemeProvider } from '@mui/material/styles';
 
-export default function Forgot() {
+
+export default function ForgotEmail({ onNext }) {
   const [email, setEmail] = React.useState(true);
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    setEmail(data.get("email"));
-    const userData = {
-      email: email,
-    };
+  const handleNext  = () => {
+    if (typeof email !== 'string' || email.trim() === '') {
+      alert('กรุณากรอกอีเมล');
+      return;
+    }
+    onNext({ email });
   };
 
   return (
@@ -41,7 +41,6 @@ export default function Forgot() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -54,13 +53,14 @@ export default function Forgot() {
               name="email"
               autoComplete="email"
               autoFocus
+              onChange={(event) => setEmail(event.target.value)}
             />
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 ,color:'white'}}
               color="primary"
+              onClick={handleNext}
             >
               ถัดไป
             </Button>
