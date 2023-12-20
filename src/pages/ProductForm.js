@@ -95,6 +95,18 @@ const App = () => {
     fetchData();
   }, []);
 
+  const [selectedStandard, setSelectedStandard] = useState(
+    standardproducts.length > 0 ? standardproducts[0] : null
+  );
+
+  const handleStandardChange = (event) => {
+    const selectedStandardName = event.target.value;
+    const selectedStandard = standardproducts.find(
+      (option) => option.standard_name === selectedStandardName
+    );
+    setSelectedStandard(selectedStandard);
+  };
+
   return (
     <ThemeProvider theme={myTheme}>
       <Container component="main" maxWidth="md">
@@ -258,11 +270,8 @@ const App = () => {
                 id="outlined-select-currency"
                 select
                 label="มาตรฐานที่ได้รับ"
-                defaultValue={
-                  standardproducts.length > 0
-                    ? standardproducts[0].standard_name
-                    : ""
-                }
+                value={selectedStandard ? selectedStandard.standard_name : ""}
+                onChange={handleStandardChange}
                 fullWidth
               >
                 {standardproducts.map((option) => (
@@ -275,6 +284,13 @@ const App = () => {
                 ))}
               </TextField>
             </Grid>
+
+            {/* ตรวจสอบค่าที่ถูกเลือกและแสดงข้อความ "Hi" */}
+            {selectedStandard && (
+              <Grid item xs={6}>
+                <TextField id="outlined-basic" label="Hi" variant="outlined" />
+              </Grid>
+            )}
           </Grid>
           <Button onClick={onSubmit} variant="contained">
             ยืนยัน
