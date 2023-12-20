@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
@@ -15,42 +16,53 @@ import { NavLink } from 'react-router-dom'
 
 const Listproduct = () => {
   const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const currencies = [
-    {
-      value: 'USD',
-      label: '$',
-    },
-    {
-      value: 'EUR',
-      label: '€',
-    },
-    {
-      value: 'BTC',
-      label: '฿',
-    },
-    {
-      value: 'JPY',
-      label: '¥',
-    },
-  ];
+  const [producttypes, setProducttypes] = useState([]);
+  const [categories, setCategories] = useState([]);
+ const [standardproducts, setStandardproducts] = useState([]);
+
+  useEffect(() => { 
+    const fetchData = async () => {
+      const response = await fetch('http://localhost:3001/categories');
+      const data = await response.json();
+      setCategories(data);
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('http://localhost:3001/producttypes');
+      const data = await response.json();
+      setProducttypes(data);
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('http://localhost:3001/standardproducts');
+      const data = await response.json();
+      setStandardproducts(data);
+    };
+    fetchData();
+  }, []);
   
   return (
     
     <Container component="main" maxWidth="md">
-      <Grid container spacing={2}>
-         <Grid item xs={12} sm={6}>
-    <TextField id="outlined-basic" label="ชื่อสินค้า" variant="outlined" fullWidth  /></Grid>
+    <Grid container spacing={2}>
+    <Grid item xs={12} sm={6}>
+    <TextField id="outlined-basic" label="ชื่อสินค้า" variant="outlined" fullWidth  />
+    </Grid>
     <Grid item xs={12} sm={6}>
     <TextField
           id="outlined-select-currency"
           select
           label="ประเภทสินค้า"
-          defaultValue="EUR"
+          defaultValue={producttypes.length > 0 ? producttypes[0].category_name : ''}
           fullWidth 
         >
-          {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
+          {producttypes.map((option) => (
+            <MenuItem key={option.TypeID} value={option.TypeName}>
+              {option.TypeName}
             </MenuItem>
           ))}
     </TextField>
@@ -60,12 +72,12 @@ const Listproduct = () => {
           id="outlined-select-currency"
           select
           label="หมวดหมู่สินค้า"
-          defaultValue="EUR"
+          defaultValue={categories.length > 0 ? categories[0].category_name : ''}
           fullWidth 
         >
-          {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
+          {categories.map((option) => (
+            <MenuItem key={option.category_id} value={option.category_name}>
+              {option.category_name}
             </MenuItem>
           ))}
     </TextField>
@@ -74,13 +86,13 @@ const Listproduct = () => {
     <TextField
           id="outlined-select-currency"
           select
-          label="ตรามาตรฐาน"
-          defaultValue="EUR"
+          label="มาตรฐานที่ได้รับ"
+          defaultValue={standardproducts.length > 0 ? standardproducts[0].standard_name : ''}
           fullWidth
         >
-          {currencies.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
+          {standardproducts.map((option) => (
+            <MenuItem key={option.standard_id} value={option.standard_name}>
+              {option.standard_name}
             </MenuItem>
           ))}
     </TextField>

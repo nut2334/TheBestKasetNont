@@ -11,7 +11,7 @@ import Price from "./pages/price";
 import "./core-ui/App.css";
 import BasicTabs from "./components/tab_login";
 import LabTabs from "./components/tab_product";
-import Product from "./pages/product";
+import ProductForm from "./pages/ProductForm";
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
         <Route path="/Forgot" element={<ForgorForm />} />
         <Route path="/Map" element={<MarkersMap />} />
         <Route path="/Price" element={<Price />} />
-        <Route path="/Product" element={<Product />} />
+        <Route path="/Product" element={<ProductForm />} />
       </Routes>
     </HashRouter>
   );
