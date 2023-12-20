@@ -19,6 +19,9 @@ import TextField from "@mui/material/TextField";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import VideoFileIcon from "@mui/icons-material/VideoFile";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 const App = () => {
   const [productName, setProductName] = useState("");
@@ -287,11 +290,54 @@ const App = () => {
 
             {/* ตรวจสอบค่าที่ถูกเลือกและแสดงข้อความ "Hi" */}
             {selectedStandard && (
-              <Grid item xs={6}>
-                <TextField id="outlined-basic" label="Hi" variant="outlined" />
-              </Grid>
+              <React.Fragment>
+                <Grid item xs={6}>
+                  <TextField
+                    id="standardNumber"
+                    label="หมายเลข"
+                    value={selectedStandard.number || ""}
+                    fullWidth
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+              <Typography variant="h7">
+                ใบรับรอง
+              </Typography>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleProductImageChange}
+              />
+              {productImage && (
+                <div style={{ marginTop: "10px" }}>
+                  <img
+                    src={URL.createObjectURL(productImage)}
+                    alt="Product Cover"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      margin: "5px",
+                      cursor: "pointer",
+                      objectFit: "cover",
+                      objectPosition: "center",
+                    }}
+                  />
+                </div>
+              )}
+            </Grid>
+            <Grid item xs={6}>
+                  <Typography variant="subtitle1">วันหมดอายุ</Typography>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker sx={{ width: "100%" }} />
+                  </LocalizationProvider>
+                </Grid>
+              </React.Fragment>
             )}
           </Grid>
+
           <Button onClick={onSubmit} variant="contained">
             ยืนยัน
           </Button>
