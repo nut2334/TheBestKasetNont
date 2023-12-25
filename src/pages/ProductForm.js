@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Container,
@@ -9,26 +8,32 @@ import {
   DialogContent,
   DialogActions,
   MenuItem,
+  Box,
+  Avatar,
+  TextField,
+  Divider,
 } from "@mui/material";
-import { ThemeProvider } from "@emotion/react";
-import myTheme from "../core-ui/theme";
-import Box from "@mui/material/Box";
-import Avatar from "@mui/material/Avatar";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
-import TextField from "@mui/material/TextField";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import VideoFileIcon from "@mui/icons-material/VideoFile";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Divider } from '@mui/material';
+import { ThemeProvider } from "@emotion/react";
+import myTheme from "../core-ui/theme";
+import { set } from "react-hook-form";
 
 const App = () => {
-  {/*ชื่อสินค้า*/}
+  {
+    /*ชื่อสินค้า*/
+  }
   const [productName, setProductName] = useState("");
-  {/*หมวดหมู่สินค้า*/}
+  {
+    /*หมวดหมู่สินค้า*/
+  }
   const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("http://localhost:3001/categories");
@@ -37,48 +42,32 @@ const App = () => {
     };
     fetchData();
   }, []);
-  {/*รูปปก*/}
+  const handleCategoryChange = (event) => {
+    const selectedCategoryName = event.target.value;
+    const selectedCategory = categories.find(
+      (option) => option.category_name === selectedCategoryName
+    );
+    setSelectedCategory(selectedCategory);
+  };
+  {
+    /*รูปปก*/
+  }
   const [productImage, setProductImage] = useState(null);
-  {/*วิดีโอ*/}
-  const [productVideo, setProductVideo] = useState(null);
-  {/*รูปเพิ่มเติม*/}
-  const [additionalImages, setAdditionalImages] = useState([]);
-  {/*รายละเอียดสินค้า*/}
-  const [description, setDescription] = useState("");
-  {/*มาตรฐานที่ได้รับ*/}
-  const [standardproducts, setStandardproducts] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("http://localhost:3001/standardproducts");
-      const data = await response.json();
-      setStandardproducts(data);
-    };
-    fetchData();
-  }, []);
-  {/*การใช้งานเว็บไซต์*/}
-  const web_activity = [{
-    activityID: "activity01",
-    activityName: "ประชาสัมพันธ์",
-  },{
-    activityID: "activity02",
-    activityName: "จองสินค้าผ่านเว็บไซต์",
-    description: "เก็บข้อมูลการติดต่อของลูกค้าเพียงอย่างเดียว",
-  },{
-    activityID: "activity03",
-    activityName: "จองสินค้าผ่านเว็บไซต์",
-    description: "เกษตรกรและลูกค้าสามารถถนัดหมายเวลาได้",
-  }];
-  const [openDialog, setOpenDialog] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   const handleProductImageChange = (e) => {
     setProductImage(e.target.files[0]);
   };
-
+  {
+    /*วิดีโอ*/
+  }
+  const [productVideo, setProductVideo] = useState(null);
   const handleProductVideoChange = (e) => {
     setProductVideo(e.target.files[0]);
   };
 
+  {
+    /*รูปเพิ่มเติม*/
+  }
+  const [additionalImages, setAdditionalImages] = useState([]);
   const handleAdditionalImagesChange = (e) => {
     const selectedImage = e.target.files[0];
 
@@ -88,28 +77,27 @@ const App = () => {
       alert("ไม่สามารถเพิ่มรูปภาพเพิ่มเติมได้ รูปภาพไม่ควรเกิน 8 รูป");
     }
   };
-
   const handleRemoveAdditionalImage = (index) => {
     const updatedImages = [...additionalImages];
     updatedImages.splice(index, 1);
     setAdditionalImages(updatedImages);
   };
-
+  {
+    /*pop-up รูปเพิ่มเติม*/
+  }
+  const [openDialog, setOpenDialog] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const handleOpenDialog = (index) => {
     setCurrentImageIndex(index);
     setOpenDialog(true);
   };
-
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
-
-  const onSubmit = async () => {};
-
+  {
+    /*การจัดส่งสินค้า*/
+  }
   const [producttypes, setProducttypes] = useState([]);
-  
-  
-  
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("http://localhost:3001/producttypes");
@@ -118,19 +106,6 @@ const App = () => {
     };
     fetchData();
   }, []);
-  
-
-  const [selectedStandard, setSelectedStandard] = useState(
-    standardproducts.length > 0 ? standardproducts[0] : null
-  );
-
-  const handleStandardChange = (event) => {
-    const selectedStandardName = event.target.value;
-    const selectedStandard = standardproducts.find(
-      (option) => option.standard_name === selectedStandardName
-    );
-    setSelectedStandard(selectedStandard);
-  };
   const [selectedType, setSelectedType] = useState(
     producttypes.length > 0 ? producttypes[0] : null
   );
@@ -140,29 +115,102 @@ const App = () => {
       (option) => option.TypeName === selectedTypeName
     );
     setSelectedType(selectedType);
+  };
+  {
+    /*มาตรฐานที่ได้รับ*/
   }
-const reservation_status = [{
-  statusID: "reservationOpenAlways",
-  statusName: "เปิดรับจองตลอด",
-},{
-  statusID: "reservationOpenPeriod",
-  statusName: "เปิดรับจองตามช่วงเวลา",
-},{
-  statusID: "reservationClose",
-  statusName: "ปิดรับจอง",
-}
-];
-
-const [selectedStatus, setSelectedStatus] = useState(
-  reservation_status.length > 0 ? reservation_status[0] : null
-);
-const handleReservationStatusChange = (event) => {
-  const selectedStatusName = event.target.value;
-  const selectedStatus = reservation_status.find(
-    (option) => option.statusName === selectedStatusName
+  const [standardproducts, setStandardproducts] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("http://localhost:3001/standardproducts");
+      const data = await response.json();
+      setStandardproducts(data);
+    };
+    fetchData();
+  }, []);
+  const [selectedStandard, setSelectedStandard] = useState(
+    standardproducts.length > 0 ? standardproducts[0] : null
   );
-  setSelectedStatus(selectedStatus);
-}
+  const handleStandardChange = (event) => {
+    const selectedStandardName = event.target.value;
+    const selectedStandard = standardproducts.find(
+      (option) => option.standard_name === selectedStandardName
+    );
+    setSelectedStandard(selectedStandard);
+  };
+  const [standardNumber, setStandardNumber] = useState("");
+  {
+    /*set Date ด้วย*/
+  }
+  const [isStandardDate, setIsStandardDate] = useState(true);
+  {
+    /*สถานะการจอง*/
+  }
+  const reservation_status = [
+    {
+      statusID: "reservationOpenAlways",
+      statusName: "เปิดรับจองตลอด",
+    },
+    {
+      statusID: "reservationOpenPeriod",
+      statusName: "เปิดรับจองตามช่วงเวลา",
+    },
+    {
+      statusID: "reservationClose",
+      statusName: "ปิดรับจอง",
+    },
+  ];
+  const [selectedStatus, setSelectedStatus] = useState(
+    reservation_status.length > 0 ? reservation_status[0] : null
+  );
+  const handleReservationStatusChange = (event) => {
+    const selectedStatusName = event.target.value;
+    const selectedStatus = reservation_status.find(
+      (option) => option.statusName === selectedStatusName
+    );
+    setSelectedStatus(selectedStatus);
+  };
+  {
+    /*รูปแบบเว็บไซต์*/
+  }
+  const web_activity = [
+    {
+      activityID: "activity01",
+      activityName: "ประชาสัมพันธ์",
+    },
+    {
+      activityID: "activity02",
+      activityName: "จองสินค้าผ่านเว็บไซต์",
+      description: "เก็บข้อมูลการติดต่อของลูกค้าเพียงอย่างเดียว",
+    },
+    {
+      activityID: "activity03",
+      activityName: "จองสินค้าผ่านเว็บไซต์",
+      description: "เกษตรกรและลูกค้าสามารถถนัดหมายเวลาได้",
+    },
+  ];
+  {
+    /*รายละเอียดสินค้า*/
+  }
+  const [description, setDescription] = useState("");
+  {
+    /*ยืนยัน*/
+  }
+  const onSubmit = () => {
+    const formData = new FormData();
+    formData.append("productName", productName);
+    formData.append("categoryName", selectedCategory.category_name);
+    formData.append("productImage", productImage);
+    formData.append("productVideo", productVideo);
+    additionalImages.forEach((image) => {
+      formData.append("additionalImages", image);
+    });
+    formData.append("description", description);
+    formData.append("standardName", selectedStandard.standard_name);
+    formData.append("standardNumber", standardNumber);
+    formData.append("isStandardDate", isStandardDate);
+  };
+
   return (
     <ThemeProvider theme={myTheme}>
       <Container component="main" maxWidth="md">
@@ -202,6 +250,7 @@ const handleReservationStatusChange = (event) => {
                   categories.length > 0 ? categories[0].category_name : ""
                 }
                 fullWidth
+                onChange={handleCategoryChange}
               >
                 {categories.map((option) => (
                   <MenuItem
@@ -321,8 +370,10 @@ const handleReservationStatusChange = (event) => {
                 onChange={(e) => setDescription(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12}><Divider/></Grid>
-
+            <Grid item xs={12}>
+              <Divider />
+            </Grid>
+            {/*มาตรฐานที่ได้รับ*/}
             <Grid item xs={6}>
               <TextField
                 id="outlined-select-currency"
@@ -342,15 +393,23 @@ const handleReservationStatusChange = (event) => {
                 ))}
               </TextField>
             </Grid>
-
-            {/* ตรวจสอบค่าที่ถูกเลือก*/}
-            {selectedStandard && (
+            {selectedStandard != "ไม่มี" && selectedStandard && (
               <React.Fragment>
+                {selectedStandard == "อื่นๆ" && (
+                  <Grid item xs={6}>
+                    <TextField
+                      id="standardName"
+                      label="ชื่อมาตรฐาน"
+                      value={selectedStandard.standard_name || ""}
+                      fullWidth
+                    />
+                  </Grid>
+                )}
                 <Grid item xs={6}>
                   <TextField
                     id="standardNumber"
                     label="หมายเลข"
-                    value={selectedStandard.number || ""}
+                    onChange={(e) => setStandardNumber(e.target.value)}
                     fullWidth
                   />
                 </Grid>
@@ -378,13 +437,18 @@ const handleReservationStatusChange = (event) => {
                     </div>
                   )}
                 </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="subtitle1">วันหมดอายุ</Typography>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker sx={{ width: "100%" }} />
-                  </LocalizationProvider>
+                {/*ถ้ามีวันหมดอายุ*/}
+                {isStandardDate && (
+                  <Grid item xs={6}>
+                    <Typography variant="subtitle1">วันหมดอายุ</Typography>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker sx={{ width: "100%" }} />
+                    </LocalizationProvider>
+                  </Grid>
+                )}
+                <Grid item xs={12}>
+                  <Divider />
                 </Grid>
-                <Grid item xs={12}><Divider/></Grid>
               </React.Fragment>
             )}
             <Grid item xs={6}>
@@ -421,9 +485,8 @@ const handleReservationStatusChange = (event) => {
                     label="ราคามัดจำ"
                     variant="outlined"
                     fullWidth
-                    number
                   />
-                  </Grid>
+                </Grid>
                 <Grid item xs={6}>
                   <TextField
                     select
@@ -438,23 +501,30 @@ const handleReservationStatusChange = (event) => {
                     ))}
                   </TextField>
                 </Grid>
-                {selectedStatus && selectedStatus.statusID == "reservationOpenPeriod" && (
-                  <React.Fragment>
-                    <Grid item xs={6}>
-                      <Typography variant="subtitle1">วันเริ่มรับจอง</Typography>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker sx={{ width: "100%" }} />
-                      </LocalizationProvider>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography variant="subtitle1">วันสิ้นสุดการจอง</Typography>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker sx={{ width: "100%" }} />
-                      </LocalizationProvider>
-                    </Grid>
-                  </React.Fragment>
-                )}
-                <Grid item xs={12}><Divider/></Grid>
+                {selectedStatus &&
+                  selectedStatus.statusID == "reservationOpenPeriod" && (
+                    <React.Fragment>
+                      <Grid item xs={6}>
+                        <Typography variant="subtitle1">
+                          วันเริ่มรับจอง
+                        </Typography>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker sx={{ width: "100%" }} />
+                        </LocalizationProvider>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography variant="subtitle1">
+                          วันสิ้นสุดการจอง
+                        </Typography>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker sx={{ width: "100%" }} />
+                        </LocalizationProvider>
+                      </Grid>
+                    </React.Fragment>
+                  )}
+                <Grid item xs={12}>
+                  <Divider />
+                </Grid>
               </React.Fragment>
             )}
           </Grid>
