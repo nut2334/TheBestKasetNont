@@ -22,15 +22,52 @@ import VideoFileIcon from "@mui/icons-material/VideoFile";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Divider } from '@mui/material';
 
 const App = () => {
+  {/*ชื่อสินค้า*/}
   const [productName, setProductName] = useState("");
-  const [category, setCategory] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
+  {/*หมวดหมู่สินค้า*/}
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("http://localhost:3001/categories");
+      const data = await response.json();
+      setCategories(data);
+    };
+    fetchData();
+  }, []);
+  {/*รูปปก*/}
   const [productImage, setProductImage] = useState(null);
+  {/*วิดีโอ*/}
   const [productVideo, setProductVideo] = useState(null);
+  {/*รูปเพิ่มเติม*/}
   const [additionalImages, setAdditionalImages] = useState([]);
+  {/*รายละเอียดสินค้า*/}
+  const [description, setDescription] = useState("");
+  {/*มาตรฐานที่ได้รับ*/}
+  const [standardproducts, setStandardproducts] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch("http://localhost:3001/standardproducts");
+      const data = await response.json();
+      setStandardproducts(data);
+    };
+    fetchData();
+  }, []);
+  {/*การใช้งานเว็บไซต์*/}
+  const web_activity = [{
+    activityID: "activity01",
+    activityName: "ประชาสัมพันธ์",
+  },{
+    activityID: "activity02",
+    activityName: "จองสินค้าผ่านเว็บไซต์",
+    description: "เก็บข้อมูลการติดต่อของลูกค้าเพียงอย่างเดียว",
+  },{
+    activityID: "activity03",
+    activityName: "จองสินค้าผ่านเว็บไซต์",
+    description: "เกษตรกรและลูกค้าสามารถถนัดหมายเวลาได้",
+  }];
   const [openDialog, setOpenDialog] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -70,17 +107,9 @@ const App = () => {
   const onSubmit = async () => {};
 
   const [producttypes, setProducttypes] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [standardproducts, setStandardproducts] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("http://localhost:3001/categories");
-      const data = await response.json();
-      setCategories(data);
-    };
-    fetchData();
-  }, []);
+  
+  
+  
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("http://localhost:3001/producttypes");
@@ -89,14 +118,7 @@ const App = () => {
     };
     fetchData();
   }, []);
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("http://localhost:3001/standardproducts");
-      const data = await response.json();
-      setStandardproducts(data);
-    };
-    fetchData();
-  }, []);
+  
 
   const [selectedStandard, setSelectedStandard] = useState(
     standardproducts.length > 0 ? standardproducts[0] : null
@@ -109,7 +131,38 @@ const App = () => {
     );
     setSelectedStandard(selectedStandard);
   };
+  const [selectedType, setSelectedType] = useState(
+    producttypes.length > 0 ? producttypes[0] : null
+  );
+  const handleTypeChange = (event) => {
+    const selectedTypeName = event.target.value;
+    const selectedType = producttypes.find(
+      (option) => option.TypeName === selectedTypeName
+    );
+    setSelectedType(selectedType);
+  }
+const reservation_status = [{
+  statusID: "reservationOpenAlways",
+  statusName: "เปิดรับจองตลอด",
+},{
+  statusID: "reservationOpenPeriod",
+  statusName: "เปิดรับจองตามช่วงเวลา",
+},{
+  statusID: "reservationClose",
+  statusName: "ปิดรับจอง",
+}
+];
 
+const [selectedStatus, setSelectedStatus] = useState(
+  reservation_status.length > 0 ? reservation_status[0] : null
+);
+const handleReservationStatusChange = (event) => {
+  const selectedStatusName = event.target.value;
+  const selectedStatus = reservation_status.find(
+    (option) => option.statusName === selectedStatusName
+  );
+  setSelectedStatus(selectedStatus);
+}
   return (
     <ThemeProvider theme={myTheme}>
       <Container component="main" maxWidth="md">
@@ -265,8 +318,10 @@ const App = () => {
                 multiline
                 fullWidth
                 rows={4}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </Grid>
+            <Grid item xs={12}><Divider/></Grid>
 
             <Grid item xs={6}>
               <TextField
@@ -288,7 +343,7 @@ const App = () => {
               </TextField>
             </Grid>
 
-            {/* ตรวจสอบค่าที่ถูกเลือกและแสดงข้อความ "Hi" */}
+            {/* ตรวจสอบค่าที่ถูกเลือก*/}
             {selectedStandard && (
               <React.Fragment>
                 <Grid item xs={6}>
@@ -297,51 +352,117 @@ const App = () => {
                     label="หมายเลข"
                     value={selectedStandard.number || ""}
                     fullWidth
-                    InputProps={{
-                      readOnly: true,
-                    }}
                   />
                 </Grid>
                 <Grid item xs={6}>
-              <Typography variant="h7">
-                ใบรับรอง
-              </Typography>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleProductImageChange}
-              />
-              {productImage && (
-                <div style={{ marginTop: "10px" }}>
-                  <img
-                    src={URL.createObjectURL(productImage)}
-                    alt="Product Cover"
-                    style={{
-                      width: "100px",
-                      height: "100px",
-                      margin: "5px",
-                      cursor: "pointer",
-                      objectFit: "cover",
-                      objectPosition: "center",
-                    }}
+                  <Typography variant="h7">ใบรับรอง</Typography>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleProductImageChange}
                   />
-                </div>
-              )}
-            </Grid>
-            <Grid item xs={6}>
+                  {productImage && (
+                    <div style={{ marginTop: "10px" }}>
+                      <img
+                        src={URL.createObjectURL(productImage)}
+                        alt="Product Cover"
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          margin: "5px",
+                          cursor: "pointer",
+                          objectFit: "cover",
+                          objectPosition: "center",
+                        }}
+                      />
+                    </div>
+                  )}
+                </Grid>
+                <Grid item xs={6}>
                   <Typography variant="subtitle1">วันหมดอายุ</Typography>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker sx={{ width: "100%" }} />
                   </LocalizationProvider>
                 </Grid>
+                <Grid item xs={12}><Divider/></Grid>
+              </React.Fragment>
+            )}
+            <Grid item xs={6}>
+              <TextField select fullWidth label="การใช้งานเว็บไซต์">
+                {web_activity.map((activity) => (
+                  <MenuItem
+                    key={activity.activityID}
+                    value={activity.activityID}
+                  >
+                    {activity.description ? (
+                      <>
+                        <Typography variant="subtitle1">
+                          {activity.activityName}
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          {activity.description}
+                        </Typography>
+                      </>
+                    ) : (
+                      <Typography variant="subtitle1">
+                        {activity.activityName}
+                      </Typography>
+                    )}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            {/* ตรวจสอบค่าที่ถูกเลือก*/}
+            {selectedType && selectedType.TypeID == "type02" && (
+              <React.Fragment>
+                <Grid item xs={6}>
+                  <TextField
+                    id="outlined-basic"
+                    label="ราคามัดจำ"
+                    variant="outlined"
+                    fullWidth
+                    number
+                  />
+                  </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    select
+                    fullWidth
+                    label="สถานะการจอง"
+                    onChange={handleReservationStatusChange}
+                  >
+                    {reservation_status.map((option) => (
+                      <MenuItem key={option.statusID} value={option.statusName}>
+                        {option.statusName}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+                {selectedStatus && selectedStatus.statusID == "reservationOpenPeriod" && (
+                  <React.Fragment>
+                    <Grid item xs={6}>
+                      <Typography variant="subtitle1">วันเริ่มรับจอง</Typography>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker sx={{ width: "100%" }} />
+                      </LocalizationProvider>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="subtitle1">วันสิ้นสุดการจอง</Typography>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker sx={{ width: "100%" }} />
+                      </LocalizationProvider>
+                    </Grid>
+                  </React.Fragment>
+                )}
+                <Grid item xs={12}><Divider/></Grid>
               </React.Fragment>
             )}
           </Grid>
-
           <Button onClick={onSubmit} variant="contained">
             ยืนยัน
           </Button>
         </form>
+
         <Dialog open={openDialog} onClose={handleCloseDialog}>
           <DialogContent>
             <img

@@ -25,6 +25,11 @@ const myTheme = createTheme({
       },
     },
   },
+  menuItem: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
 });
 
 export default myTheme;
