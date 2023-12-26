@@ -22,7 +22,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ThemeProvider } from "@emotion/react";
 import myTheme from "../core-ui/theme";
-import axios from "axios";
+import { set } from "react-hook-form";
 
 const App = () => {
   {
@@ -131,18 +131,20 @@ const App = () => {
   const [selectedStandard, setSelectedStandard] = useState(
     standardproducts.length > 0 ? standardproducts[0] : null
   );
+  const [isStandardDate, setIsStandardDate] = useState(true);
   const handleStandardChange = (event) => {
     const selectedStandardName = event.target.value;
-    const selectedStandard = standardproducts.find(
+    const name = standardproducts.find(
       (option) => option.standard_name === selectedStandardName
     );
-    setSelectedStandard(selectedStandard);
+    setSelectedStandard(name.standard_name);
+    console.log(name.expire);
+    setIsStandardDate(name.expire);
   };
   const [standardNumber, setStandardNumber] = useState("");
   {
-    /*set Date ด้วย*/
   }
-  const [isStandardDate, setIsStandardDate] = useState(true);
+
   {
     /*สถานะการจอง*/
   }
@@ -209,10 +211,6 @@ const App = () => {
     formData.append("standardName", selectedStandard.standard_name);
     formData.append("standardNumber", standardNumber);
     formData.append("isStandardDate", isStandardDate);
-    
-    axios.post("http://localhost:3001/addproduct", formData).then((res) => {
-      console.log(res);
-    });
   };
 
   return (
@@ -383,7 +381,7 @@ const App = () => {
                 id="outlined-select-currency"
                 select
                 label="มาตรฐานที่ได้รับ"
-                value={selectedStandard ? selectedStandard.standard_name : ""}
+                value={selectedStandard ? selectedStandard : ""}
                 onChange={handleStandardChange}
                 fullWidth
               >
