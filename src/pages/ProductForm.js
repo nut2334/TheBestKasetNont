@@ -22,7 +22,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ThemeProvider } from "@emotion/react";
 import myTheme from "../core-ui/theme";
-import { set } from "react-hook-form";
+import axios from "axios";
 
 const App = () => {
   {
@@ -209,6 +209,10 @@ const App = () => {
     formData.append("standardName", selectedStandard.standard_name);
     formData.append("standardNumber", standardNumber);
     formData.append("isStandardDate", isStandardDate);
+    
+    axios.post("http://localhost:3001/addproduct", formData).then((res) => {
+      console.log(res);
+    });
   };
 
   return (
