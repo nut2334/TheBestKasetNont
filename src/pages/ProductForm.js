@@ -22,8 +22,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { ThemeProvider } from "@emotion/react";
 import myTheme from "../core-ui/theme";
-import { set } from "react-hook-form";
-
+import axios from "axios";
 const App = () => {
   {
     /*ชื่อสินค้า*/
@@ -95,27 +94,10 @@ const App = () => {
     setOpenDialog(false);
   };
   {
-    /*การจัดส่งสินค้า*/
+    /*รูปแบบสินค้า*/
   }
-  const [producttypes, setProducttypes] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch("http://localhost:3001/producttypes");
-      const data = await response.json();
-      setProducttypes(data);
-    };
-    fetchData();
-  }, []);
-  const [selectedType, setSelectedType] = useState(
-    producttypes.length > 0 ? producttypes[0] : null
-  );
-  const handleTypeChange = (event) => {
-    const selectedTypeName = event.target.value;
-    const selectedType = producttypes.find(
-      (option) => option.TypeName === selectedTypeName
-    );
-    setSelectedType(selectedType);
-  };
+  const [selectedType, setSelectedType] = useState("");
+  const [selectedTypeDescription, setSelectedTypeDescription] = useState("");
   {
     /*มาตรฐานที่ได้รับ*/
   }
@@ -144,7 +126,20 @@ const App = () => {
   const [standardNumber, setStandardNumber] = useState("");
   {
   }
-
+  const [selectedDate, setSelectedDate] = useState(null);
+  // ฟังก์ชันที่จะถูกเรียกเมื่อมีการเปลี่ยนแปลงใน DatePicker
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+  const [certification, setCertification] = useState(null);
+  const [openCertificationDialog, setOpenCertificationDialog] = useState(false);
+  const handleCertificationChange = (e) => {
+    setCertification(e.target.files[0]);
+  };
+  const handleRemoveCertification = () => {
+    setCertification(null);
+    setOpenCertificationDialog(false);
+  };
   {
     /*สถานะการจอง*/
   }
@@ -183,14 +178,14 @@ const App = () => {
     {
       activityID: "activity02",
       activityName: "จองสินค้าผ่านเว็บไซต์",
-      description: "เก็บข้อมูลการติดต่อของลูกค้าเพียงอย่างเดียว",
+      description: ["เก็บข้อมูลการติดต่อของลูกค้าเพียงอย่างเดียว","เกษตรกรและลูกค้าสามารถถนัดหมายวันเวลาได้"],
     },
     {
       activityID: "activity03",
-      activityName: "จองสินค้าผ่านเว็บไซต์",
-      description: "เกษตรกรและลูกค้าสามารถถนัดหมายเวลาได้",
+      activityName: "สินค้าจัดส่งไปรษณีย์",
     },
   ];
+
   {
     /*รายละเอียดสินค้า*/
   }
@@ -210,7 +205,14 @@ const App = () => {
     formData.append("description", description);
     formData.append("standardName", selectedStandard.standard_name);
     formData.append("standardNumber", standardNumber);
-    formData.append("isStandardDate", isStandardDate);
+    formData.append("certification", certification);
+    formData.append("selectedDate", selectedDate);
+    formData.append("selectedType", selectedType.activityName);
+    formData.append("selectedTypeDescription", selectedTypeDescription);
+
+    axios.post("http://localhost:3001/addproduct", formData).then((res) => {
+      console.log(res);
+    });
   };
 
   return (
@@ -420,21 +422,21 @@ const App = () => {
                   <input
                     type="file"
                     accept="image/*"
-                    onChange={handleProductImageChange}
+                    onChange={handleCertificationChange}
                   />
-                  {productImage && (
+                  {certification && (
                     <div style={{ marginTop: "10px" }}>
                       <img
-                        src={URL.createObjectURL(productImage)}
-                        alt="Product Cover"
+                        src={URL.createObjectURL(certification)}
+                        alt="certificationImage"
                         style={{
                           width: "100px",
                           height: "100px",
-                          margin: "5px",
                           cursor: "pointer",
                           objectFit: "cover",
                           objectPosition: "center",
                         }}
+                        onClick={() => setOpenCertificationDialog(true)}
                       />
                     </div>
                   )}
@@ -444,7 +446,10 @@ const App = () => {
                   <Grid item xs={6}>
                     <Typography variant="subtitle1">วันหมดอายุ</Typography>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker sx={{ width: "100%" }} />
+                      <DatePicker
+                        sx={{ width: "100%" }}
+                        onChange={handleDateChange}
+                      />
                     </LocalizationProvider>
                   </Grid>
                 )}
@@ -454,33 +459,29 @@ const App = () => {
               </React.Fragment>
             )}
             <Grid item xs={6}>
-              <TextField select fullWidth label="การใช้งานเว็บไซต์">
+              <TextField select fullWidth label="รูปแบบสินค้า">
                 {web_activity.map((activity) => (
-                  <MenuItem
-                    key={activity.activityID}
-                    value={activity.activityID}
-                  >
-                    {activity.description ? (
-                      <>
-                        <Typography variant="subtitle1">
-                          {activity.activityName}
-                        </Typography>
-                        <Typography variant="body2" color="textSecondary">
-                          {activity.description}
-                        </Typography>
-                      </>
-                    ) : (
-                      <Typography variant="subtitle1">
-                        {activity.activityName}
-                      </Typography>
-                    )}
+                  <MenuItem key={activity.activityID} value={activity.activityName} onClick={() => setSelectedType(activity)}>
+                    {activity.activityName}
                   </MenuItem>
                 ))}
               </TextField>
             </Grid>
-            {/* ตรวจสอบค่าที่ถูกเลือก*/}
-            {selectedType && selectedType.TypeID == "type02" && (
+            {selectedType && selectedType.activityID == "activity02" && (
               <React.Fragment>
+                <Grid item xs={6}>
+                  <TextField
+                    label="จองสินค้าผ่านเว็บไซต์"
+                    fullWidth
+                    select
+                  >
+                    {selectedType.description.map((option) => (
+                      <MenuItem key={option} value={option} onClick={() => setSelectedTypeDescription(option)}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
                 <Grid item xs={6}>
                   <TextField
                     id="outlined-basic"
@@ -560,6 +561,30 @@ const App = () => {
             </Button>
           </DialogActions>
         </Dialog>
+
+        <Dialog open={openCertificationDialog} onClose={() => setOpenCertificationDialog(false)}>
+        <DialogContent>
+          <img
+            src={certification && URL.createObjectURL(certification)}
+            alt="certificationImage"
+            style={{ maxWidth: "100%", maxHeight: "400px" }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenCertificationDialog(false)} color="primary">
+            ปิด
+          </Button>
+          <Button
+            onClick={handleRemoveCertification}
+            color="secondary"
+            variant="contained"
+            startIcon={<DeleteIcon />}
+          >
+            ลบรูปภาพ
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       </Container>
     </ThemeProvider>
   );
